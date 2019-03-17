@@ -37,19 +37,18 @@ rm -rf %{proj_name}.egg-info
 CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 %install
-%{__rm} -rf %{buildroot}
 %{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 
-%{__install} -D -m 0640 -p etc/seafile.conf -d %{buildroot}/
-%{__install} -D -m 0644 -p etc/sysconfig/seafile -d %{buildroot}/
+%{__install} -D -m 0640 -p etc/seafile.conf -t %{buildroot}%{_sysconfdir}
+%{__install} -D -m 0644 -p etc/sysconfig/seafile -t %{buildroot}%{_sysconfdir}/sysconfig
 %{__install} -D -m 0644 -p seafile.service %{buildroot}%{_unitdir}/seafile.service
 
-#%{__install} -D -m 0644 -p etc/nginx/conf.d/seahub.conf -d %{buildroot}/
-#%{__install} -D -m 0644 -p etc/uswgi.d/seahub.ini -d %{buildroot}/
+
+mkdir -p %{buildroot}/var/log/seafile
 
 
 for l in bin/*;do
-    %{__install} -D -m 0755 l -d %{buildroot}%{_bindir}/
+    %{__install} -D -m 0755 $l -t %{buildroot}%{_bindir}
 done;
 
 
@@ -86,6 +85,8 @@ systemctl stop seafile.service
 %doc doc/*
 %doc etc/nginx/conf.d/seahub.conf
 %doc etc/uwsgi.d/seahub.ini
+%defattr(-,seafile,seafile,-)
+%dir /var/log/seafile
 
 %changelog
 * Fri Mar 15 2019 Lolizeppelin <lolizeppelin@gmail.com> - 1.0.0
