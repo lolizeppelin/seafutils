@@ -1,0 +1,21 @@
+#!/usr/bin/python2.7
+from oslocfg import cfg
+from seafutil import config
+from seafutil.seahub import SeahubCommand
+
+CONF = cfg.CONF
+
+CONF.register_cli_opts(config.server_opts)
+CONF.register_cli_opts(config.base_init_opts)
+CONF.register_cli_opts(config.seahub_init_opts)
+CONF.register_cli_opts(config.database_init_opts)
+CONF(project='seafile-init-ccnet', default_config_files=['/etc/seafile.conf', ])
+
+
+def main():
+    initParser = SeahubCommand(CONF.environ_file)
+    initParser.generate_conf()
+    initParser.execute()
+
+if __name__ == '__main__':
+    main()

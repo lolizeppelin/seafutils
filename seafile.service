@@ -1,0 +1,19 @@
+[Unit]
+Description=Seafile
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/seafile
+Type=forking
+PIDFile={PIDFILE}
+GuessMainPID=no
+User=${User}
+Group=${User}
+ExecStart=/usr/bin/seafile-luanch --action start --config ${CONFIGFILE} --pid ${PIDFILE} --timeout ${TIMEOUT}
+TimeoutStartSec=${TIMEOUT}
+TimeoutStopSec=30
+ExecStopPost=/usr/bin/seafile-stop --action stop --config ${CONFIGFILE} --pid ${PIDFILE} --timeout 25
+
+
+[Install]
+WantedBy=multi-user.target
