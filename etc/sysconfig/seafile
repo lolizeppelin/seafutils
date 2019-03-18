@@ -1,6 +1,2 @@
 # Environment File For Seafile server
 CONFIGFILE=/etc/seafile.conf
-PIDFILE=/run/seafile-controller.pid
-TIMEOUT=5
-User=seafile
-Group=seafile

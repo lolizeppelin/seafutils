@@ -11,10 +11,6 @@ seafile-luanch 是服务器启动的代理脚本,用于启动和关闭seafile-co
 默认systemd.service设置EnvironmentFile=/etc/sysconfig/seafile
 环境变量文件/etc/sysconfig/seafile文件内容为
 CONFIGFILE=/etc/seafile.conf            # seafile-luanch启动所用配置文件
-PIDFILE=/run/seafile-controller.pid     # 提供给systemd的seafile-controller进程pid文件
-TIMEOUT=5                               # systemd和seafile-luanch 共用的启动超时时间
-User=seafile                            # systemd调用seafile-luanch所用用户
-Group=seafile                           # systemd调用seafile-luanch所用组
 
 如果需要修改启动
 标准做法是通过systemctl edit sefile.service修改

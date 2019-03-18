@@ -4,17 +4,16 @@ After=network.target
 
 [Service]
 LimitNOFILE=10000
-LimitMEMLOCK=10000
 EnvironmentFile=/etc/sysconfig/seafile
 Type=forking
-PIDFile={PIDFILE}
+PIDFile=/run/seafile-controller.pid
 GuessMainPID=no
-User=${User}
-Group=${User}
-ExecStart=/usr/bin/seafile-luanch --action start --config ${CONFIGFILE} --pid ${PIDFILE} --timeout ${TIMEOUT}
-TimeoutStartSec=${TIMEOUT}
+User=seafile
+Group=seafile
+ExecStart=/usr/bin/seafile-luanch --action start --config ${CONFIGFILE} --pid /run/seafile-controller.pid --timeout 5
+TimeoutStartSec=6
 TimeoutStopSec=30
-ExecStopPost=/usr/bin/seafile-stop --action stop --config ${CONFIGFILE} --pid ${PIDFILE} --timeout 25
+ExecStopPost=/usr/bin/seafile-stop --action stop --config ${CONFIGFILE} --pid /run/seafile-controller.pid --timeout 25
 
 
 [Install]
