@@ -4,14 +4,12 @@ import pwd
 import grp
 import contextlib
 from oslocfg import cfg
-import sqlalchemy
-import sqlalchemy.engine.url
-from sqlalchemy.pool import NullPool
-
 CONF = cfg.CONF
 
 
 class SeafCommand(object):
+
+    DATADIR = 'unkonwn'
 
     def __init__(self, environ_file):
         if not os.path.exists(environ_file):
@@ -21,6 +19,12 @@ class SeafCommand(object):
         if os.path.getsize(environ_file) > 4096:
             raise ValueError('environ file over size')
 
+        if CONF.datadir == '/':
+            raise ValueError('Datadir value error')
+        if '.' in CONF.datadir:
+            raise ValueError('Datadir value error')
+        if not os.path.exists(CONF.datadir):
+            raise ValueError('Path %s not exist' % CONF.datadir)
         self.user = None
         self.group = None
         with open(environ_file, 'r') as f:
@@ -32,8 +36,12 @@ class SeafCommand(object):
                 key = kvlist[0].strip()
                 value = kvlist[1].strip()
                 if key.lower() == 'user':
+                    if value == 'root':
+                        raise ValueError('Seafile user is root!')
                     self.user = value
                 if key.lower() == 'group':
+                    if value == 'root':
+                        raise ValueError('Seafile group is root!')
                     self.group = value
                 if self.user and self.group:
                     break
@@ -54,28 +62,36 @@ class SeafCommand(object):
         cls = getattr(module, 'DbEngine')
         self.database = cls()
 
+    def chown(self, path):
+        os.chown(path, self.user.pw_uid, self.user.pw_gid)
+
     def pre_exec(self):
-        os.setgid(self.group.gr_gid)
+        os.setgid(self.user.pw_gid)
         os.setuid(self.user.pw_uid)
 
-
-    def connect(self):
-        url = '%(engine)s://%(user)s:%(passwd)s@%(host)s:%(port)s' % \
-              dict(engine=self.ENGINEMAP[CONF.engine],
-                   user=CONF.rname if CONF.create else CONF.dbuser,
-                   passwd=CONF.rpass if CONF.create else CONF.dbpasswd,
-                   host=CONF.dbhost, port=str(CONF.dbport))
-        if CONF.create:
-            url += '/%s' % CONF.dbname
-        engine = sqlalchemy.create_engine(url,
-                                          poolclass=NullPool, echo=CONF.debug,
-                                          logging_name='init-%s' % CONF.dbname,
-                                          encoding='utf-8')
-        return engine
-
+    @contextlib.contextmanager
+    def prepare_datadir(self):
+        datadir = os.path.join(CONF.datadir, self.DATADIR)
+        if os.path.exists(datadir):
+            for root, dirs, files in os.walk(datadir):
+                if dirs or files:
+                    raise Exception('Data dir is not empty')
+                else:
+                    break
+        else:
+            os.makedirs(datadir, mode=0755, exist_ok=False)
+        self.chown(datadir)
+        try:
+            yield
+        except Exception as e:
+            try:
+                os.removedirs(datadir)
+            except Exception:
+                pass
+            raise e
 
     def generate_cmd(self):
         pass
-
+    @contextlib.contextmanager
     def generate_conf(self):
         pass

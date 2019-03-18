@@ -1,4 +1,5 @@
 import os
+import contextlib
 import shutil
 import contextlib
 from oslocfg import cfg
@@ -39,20 +40,28 @@ def make_symlink(source, target):
 
 class SeahubCommand(SeafCommand):
 
+    @contextlib.contextmanager
     def generate_conf(self):
 
-        conf = CONF[NAME]
 
-        cfile = os.path.join(CONF.cfgdir, FILENAME)
-        text = template % dict(key=CONF.hubkey,
-                               name=conf.dbname,
-                               engine=conf.engine,
-                               username=conf.dbuser,
-                               password=conf.dbpass,
-                               host=conf.dbhost,
-                               port=conf.dbport)
-        with open(cfile, 'w') as f:
-            f.write(text)
+        with self.prepare_datadir():
+            conf = CONF[NAME]
+            cfile = os.path.join(CONF.cfgdir, FILENAME)
+            text = template % dict(key=CONF.hubkey,
+                                   name=conf.dbname,
+                                   engine=conf.engine,
+                                   username=conf.dbuser,
+                                   password=conf.dbpass,
+                                   host=conf.dbhost,
+                                   port=conf.dbport)
+            with open(cfile, 'w') as f:
+                f.write(text)
+            try:
+                yield
+            except Exception as e:
+                os.remove(cfile)
+                raise e
+
 
     @contextlib.contextmanager
     def prepare_avatar_dir(self):
@@ -68,7 +77,7 @@ class SeahubCommand(SeafCommand):
         # copy to dst
         shutil.copy(orig_avatar_dir_default, dest_avatar_dir)
         # change owner
-        os.chown(dest_avatar_dir, self.user.pw_uid, self.user.pw_gid)
+        self.chown(dest_avatar_dir)
         # make symlink
         make_symlink(dest_avatar_dir, orig_avatar_dir)
 
@@ -81,7 +90,6 @@ class SeahubCommand(SeafCommand):
             shutil.rmtree(dest_avatar_dir)
             shutil.move(orig_avatar_dir_default, orig_avatar_dir)
             raise e
-
 
     def execute(self):
         with self.prepare_avatar_dir():

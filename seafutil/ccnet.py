@@ -1,4 +1,5 @@
 import os
+import contextlib
 from oslocfg import cfg
 import subprocess
 from seafutil.command import SeafCommand
@@ -38,21 +39,28 @@ class CcnetCommand(SeafCommand):
 
         return argv
 
+    @contextlib.contextmanager
     def generate_conf(self):
         if os.path.exists(CONF.cfgdir, FILENAME):
             raise Exception('config file exist!')
-        conf = CONF[NAME]
-        cfile = os.path.join(CONF.cfgdir, FILENAME)
-        section = 'Database'
-        config = ConfigParser()
-        config.add_section(section)
-        config.set(section, 'ENGINE', conf.engine)
-        config.set(section, 'HOST', conf.dbhost or conf.unix_socket)
-        config.set(section, 'PORT', str(conf.dbport))
-        config.set(section, 'USER', conf.dbuser)
-        config.set(section, 'PASSWD', conf.dbpass)
-        config.set(section, 'DB', conf.dbname)
-        config.set(section, 'CONNECTION_CHARSET', 'utf8')
-        with open(cfile, 'wb') as f:
-            config.write(f)
+        with self.prepare_datadir():
+            conf = CONF[NAME]
+            cfile = os.path.join(CONF.cfgdir, FILENAME)
+            section = 'Database'
+            config = ConfigParser()
+            config.add_section(section)
+            config.set(section, 'ENGINE', conf.engine)
+            config.set(section, 'HOST', conf.dbhost)
+            config.set(section, 'PORT', str(conf.dbport))
+            config.set(section, 'USER', conf.dbuser)
+            config.set(section, 'PASSWD', conf.dbpass)
+            config.set(section, 'DB', conf.dbname)
+            config.set(section, 'CONNECTION_CHARSET', 'utf8')
+            with open(cfile, 'wb') as f:
+                config.write(f)
+            try:
+                yield
+            except Exception as e:
+                os.remove(cfile)
+                raise e
 
