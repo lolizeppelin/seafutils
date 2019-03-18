@@ -3,6 +3,8 @@ Description=Seafile
 After=network.target
 
 [Service]
+LimitNOFILE=10000
+LimitMEMLOCK=10000
 EnvironmentFile=/etc/sysconfig/seafile
 Type=forking
 PIDFile={PIDFILE}

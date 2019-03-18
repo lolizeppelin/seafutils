@@ -25,8 +25,8 @@ EnvironmentFile的方式变更环境变量配置文件的指向
 ```text
 具体参考seafutil.conf模块中的各个opts
 无默认值的必要配置为
-name      设置程序名字
-external  程序对外IP/域名
+name      seafile servername
+external  seafile server对外IP/域名
 datadir   seafile存放数据的文件夹,sefile、seahub、ccent的数据文件夹都在这个文件夹下
 seahub    seahub程序文件根目录,seahub是一个python网站,没有打rpm包,通过这个配置指定seahub的网站根目录
 hubkey    seahub所用的加密key,建议参考官网的key生成方式用随机算法生成
