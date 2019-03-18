@@ -1,11 +1,11 @@
 # Seafile 服务端部署工具
 
 ### 使用说明
-seafile-init-* 是对应初始化脚本
-seafile-luanch 是服务器启动的代理脚本,用于启动和关闭seafile-controller
+seafile-init-* 是对应程序初始化脚本
+seafile-luanch 是服务器启动的代理脚本,用于启动和关闭seafile-controller,由systemd调用
 
 
-### 默认配置配置说明
+### 配置说明
 1. lucach启动配置
 ```text
 默认systemd.service设置EnvironmentFile=/etc/sysconfig/seafile
@@ -15,6 +15,10 @@ PIDFILE=/run/seafile-controller.pid     # 提供给systemd的seafile-controller�
 TIMEOUT=5                               # systemd和seafile-luanch 共用的启动超时时间
 User=seafile                            # systemd调用seafile-luanch所用用户
 Group=seafile                           # systemd调用seafile-luanch所用组
+
+如果需要修改启动
+标准做法是通过systemctl edit sefile.service修改
+EnvironmentFile的方式变更环境变量配置文件的指向
 ```
 
 2. seafile.conf内容
