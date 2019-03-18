@@ -1,0 +1,20 @@
+--- CMakeLists.txt	2012-10-24 00:33:13.000000000 -0400
++++ CMakeLists.txt.share	2019-03-15 02:39:03.752337773 -0400
+@@ -179,10 +179,16 @@ if (EVHTP_DISABLE_SSL)
+ 	set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DEVHTP_DISABLE_SSL")
+ endif()
+ 
+-add_library(libevhtp STATIC ${LIBEVHTP_SOURCES} ${ONIG_SOURCES})
++add_library(libevhtp SHARED ${LIBEVHTP_SOURCES} ${ONIG_SOURCES})
+ set_target_properties(libevhtp PROPERTIES OUTPUT_NAME "evhtp")
++#set_target_properties(libevhtp CLEAN_DIRECT_OUTPUT 1)
++
++add_library(libevhtp_static STATIC ${LIBEVHTP_SOURCES} ${ONIG_SOURCES})
++set_target_properties(libevhtp_static PROPERTIES OUTPUT_NAME "evhtp")
++#set_target_properties(libevhtp_static CLEAN_DIRECT_OUTPUT 1)
+ 
+ install (TARGETS libevhtp DESTINATION lib)
++install (TARGETS libevhtp_static DESTINATION lib)
+ install (FILES evhtp.h DESTINATION include)
+ install (FILES htparse/htparse.h DESTINATION include)
+ install (FILES evthr/evthr.h DESTINATION include)
