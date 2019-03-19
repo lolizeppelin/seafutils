@@ -58,13 +58,15 @@ class SeafCommand(object):
             yield
         except Exception as e:
             try:
-                os.removedirs(datadir)
+                os.rmdir(datadir)
             except Exception:
                 pass
             raise e
 
     def generate_cmd(self):
         pass
+
+
     @contextlib.contextmanager
     def generate_conf(self):
         pass

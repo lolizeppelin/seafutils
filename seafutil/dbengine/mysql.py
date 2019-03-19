@@ -37,7 +37,7 @@ class DbEngine(DbEngineBase):
     def create_user(self):
         _auth = {'schema': CONF.dbname,
                  'user': CONF.dbusr,
-                 'passwd': CONF.dbpasswd,
+                 'passwd': CONF.dbpass,
                  'source': CONF.scope,
                  'privileges': 'ALL'}
         sqls = ["GRANT %(privileges)s ON %(schema)s.* "

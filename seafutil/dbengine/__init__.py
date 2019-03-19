@@ -27,7 +27,7 @@ class DbEngineBase(object):
         url = '%(engine)s://%(user)s:%(passwd)s@%(host)s:%(port)s' % \
               dict(engine=self.ENGINEPREFIX,
                    user=CONF.rname if CONF.create else CONF.dbuser,
-                   passwd=CONF.rpass if CONF.create else CONF.dbpasswd,
+                   passwd=CONF.rpass if CONF.create else CONF.dbpass,
                    host=CONF.dbhost, port=str(CONF.dbport))
         if CONF.create:
             url += '/%s' % CONF.dbname
