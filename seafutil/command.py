@@ -52,7 +52,7 @@ class SeafCommand(object):
                 else:
                     break
         else:
-            os.makedirs(datadir, mode=0755, exist_ok=False)
+            os.makedirs(datadir, mode=0755)
         self.chown(datadir)
         try:
             yield

@@ -31,7 +31,7 @@ class SeafileCommand(SeafCommand):
 
     def generate_cmd(self):
 
-        conf = CONF[NAME]
+        conf = CONF
         argv = [
             self.EXECFILE,
             '-F', CONF.cfgdir,
@@ -59,7 +59,7 @@ class SeafileCommand(SeafCommand):
             raise Exception('Config seafie.ini exist')
 
         with self.prepare_datadir():
-            conf = CONF[NAME]
+            conf = CONF
             cfile = os.path.join(CONF.cfgdir, FILENAME)
             section = 'database'
             config = ConfigParser()

@@ -27,24 +27,22 @@ class CcnetCommand(SeafCommand):
 
     def generate_cmd(self):
 
-        conf = CONF[NAME]
-
         argv = [
             self.EXECFILE,
             '-F', CONF.cfgdir,
             '--config-dir', os.path.join(CONF.datadir, self.DATADIR),
-            '--name', conf.name,
-            '--host', conf.host,
+            '--name', CONF.name,
+            '--host', CONF.external,
         ]
 
         return argv
 
     @contextlib.contextmanager
     def generate_conf(self):
-        if os.path.exists(CONF.cfgdir, FILENAME):
+        if os.path.exists(os.path.join(CONF.cfgdir, FILENAME)):
             raise Exception('config file exist!')
         with self.prepare_datadir():
-            conf = CONF[NAME]
+            conf = CONF
             cfile = os.path.join(CONF.cfgdir, FILENAME)
             section = 'Database'
             config = ConfigParser()

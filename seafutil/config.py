@@ -120,7 +120,7 @@ seafile_init_opts = [
     cfg.PortOpt('port',
                 default=8082,
                 help='Seafile file server public port'),
-    cfg.PortOpt('internal-port',
+    cfg.PortOpt('iport',
                 default=12001,
                 choices=[12001],
                 help='Seafile server internal port'),
