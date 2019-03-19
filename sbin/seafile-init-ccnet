@@ -13,7 +13,7 @@ CONF(project='seafile-init-ccnet', default_config_files=['/etc/seafile.conf', ])
 
 
 def main():
-    initParser = CcnetCommand(CONF.environ_file)
+    initParser = CcnetCommand()
     with initParser.generate_conf():
         initParser.execute()
 

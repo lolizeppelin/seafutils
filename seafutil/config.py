@@ -58,9 +58,12 @@ luanch_opts = [
 
 # options for init script
 base_init_opts = [
-    cfg.StrOpt('environ-file',
-               default='/etc/sysconfig/seafile',
-               help='database host'),
+    cfg.StrOpt('user',
+               default='seafile',
+               help='eseafile process running user'),
+    cfg.StrOpt('group',
+               default='seafile',
+               help='seafile process running group'),
 ]
 
 database_init_opts = [
