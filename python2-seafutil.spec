@@ -70,10 +70,11 @@ exit 0
 
 %preun
 systemctl stop seafile.service
-
-
-%postun
 /usr/sbin/userdel seafile > /dev/null
+
+
+#%postun
+#/usr/sbin/userdel seafile > /dev/null
 
 
 %files
