@@ -15,7 +15,7 @@ CONF = cfg.CONF
 EXECFILE = '/usr/bin/seafile-controller'
 
 CONF.register_cli_opts(config.luanch_opts)
-CONF(project='seafile-luanch')
+CONF(project='seafutil-luanch')
 
 P = object()
 

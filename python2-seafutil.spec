@@ -81,8 +81,8 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/*
-%{_sbindir}/seafile-init-*
+%{_bindir}/seafutil-*
+%{_sbindir}/seafutil-init-*
 %config(noreplace) %{_sysconfdir}/seafile.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/seafile
 %{_unitdir}/seafile.service

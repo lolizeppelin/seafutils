@@ -4,7 +4,7 @@
 seafile-init-* 是对应程序初始化脚本,必须由root执行
 如果需要后续程序以非seafile用户运行,需要在init阶段指定用户
 否则需要手动修改生成的文件夹权限
-seafile-luanch 是服务器启动的代理脚本,用于启动和关闭seafile-controller,由systemd调用
+seafutil-luanch 是服务器启动的代理脚本,用于启动和关闭seafile-controller,由systemd调用
 
 
 ### 配置说明
@@ -12,7 +12,7 @@ seafile-luanch 是服务器启动的代理脚本,用于启动和关闭seafile-co
 ```text
 默认systemd.service设置EnvironmentFile=/etc/sysconfig/seafile
 环境变量文件/etc/sysconfig/seafile文件内容为
-CONFIGFILE=/etc/seafile.conf            # seafile-luanch启动所用配置文件
+CONFIGFILE=/etc/seafile.conf            # seafutil-luanch启动所用配置文件
 
 如果需要修改启动
 标准做法是通过systemctl edit sefile.service修改
