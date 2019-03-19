@@ -73,6 +73,7 @@ class SeafileCommand(SeafCommand):
             config.set(section, 'connection_charset', 'utf8')
             with open(cfile, 'wb') as f:
                 config.write(f)
+            self.chown(cfile)
 
             cfile2 = os.path.join(CONF.cfgdir, FILENAME2)
             section = 'WEBDAV'
@@ -85,6 +86,7 @@ class SeafileCommand(SeafCommand):
 
             with open(cfile2, 'wb') as f:
                 config.write(f)
+            self.chown(cfile2)
 
             cfile3 = os.path.join(CONF.datadir, CcnetCommand.DATADIR, FILENAME3)
             with open(cfile3, 'w') as fp:

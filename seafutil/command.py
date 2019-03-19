@@ -2,6 +2,7 @@ import os
 import sys
 import pwd
 import grp
+import shutil
 import contextlib
 from oslocfg import cfg
 CONF = cfg.CONF
@@ -55,7 +56,12 @@ class SeafCommand(object):
                 else:
                     break
             os.rmdir(datadir)
-        yield
+        try:
+            yield
+        except Exception as e:
+            shutil.rmtree(datadir)
+            raise e
+
     def generate_cmd(self):
         pass
 
