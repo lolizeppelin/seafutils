@@ -10,10 +10,10 @@ PIDFile=/run/seafile-controller.pid
 GuessMainPID=no
 User=seafile
 Group=seafile
-ExecStart=/usr/bin/seafile-luanch --action start --config ${CONFIGFILE} --pid /run/seafile-controller.pid --timeout 5
+ExecStart=/usr/bin/seafile-luanch --action start --config ${CONFIGFILE} -p /run/seafile-controller.pid --t 5
 TimeoutStartSec=6
 TimeoutStopSec=30
-ExecStopPost=/usr/bin/seafile-stop --action stop --config ${CONFIGFILE} --pid /run/seafile-controller.pid --timeout 25
+ExecStopPost=/usr/bin/seafile-stop --action stop --config ${CONFIGFILE} -p /run/seafile-controller.pid -t 25
 
 
 [Install]

@@ -51,6 +51,10 @@ for l in bin/*;do
     %{__install} -D -m 0755 $l -t %{buildroot}%{_bindir}
 done;
 
+for l in sbin/*;do
+    %{__install} -D -m 0755 $l -t %{buildroot}%{_sbindir}
+done;
+
 
 %pre
 getent group seafile >/dev/null || groupadd -f -g 873 -r seafile
@@ -75,6 +79,7 @@ systemctl stop seafile.service
 %files
 %defattr(-,root,root,-)
 %{_bindir}/*
+%{_sbindir}/seafile-init-*
 %{_sysconfdir}/seafile.conf
 %{_sysconfdir}/sysconfig/seafile
 %{_unitdir}/seafile.service
