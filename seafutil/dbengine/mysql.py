@@ -18,6 +18,7 @@ class DbEngine(DbEngineBase):
             for row in r:
                 tbs.append(row[0])
             r.close()
+        return tbs
 
     def databases(self):
         dbs = []
@@ -26,6 +27,7 @@ class DbEngine(DbEngineBase):
             for row in r:
                 dbs.append(row[0])
             r.close()
+        return dbs
 
     def create_db(self):
         sql = "CREATE DATABASE %s default character set utf8" % CONF.dbname
@@ -36,7 +38,7 @@ class DbEngine(DbEngineBase):
 
     def create_user(self):
         _auth = {'schema': CONF.dbname,
-                 'user': CONF.dbusr,
+                 'user': CONF.dbuser,
                  'passwd': CONF.dbpass,
                  'source': CONF.scope,
                  'privileges': 'ALL'}

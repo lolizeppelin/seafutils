@@ -29,7 +29,7 @@ class DbEngineBase(object):
                    user=CONF.rname if CONF.create else CONF.dbuser,
                    passwd=CONF.rpass if CONF.create else CONF.dbpass,
                    host=CONF.dbhost, port=str(CONF.dbport))
-        if CONF.create:
+        if not CONF.create:
             url += '/%s' % CONF.dbname
         engine = sqlalchemy.create_engine(url,
                                           poolclass=NullPool, echo=CONF.debug,

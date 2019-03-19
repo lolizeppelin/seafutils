@@ -46,23 +46,16 @@ class SeafCommand(object):
     def prepare_datadir(self):
         datadir = os.path.join(CONF.datadir, self.DATADIR)
         if os.path.exists(datadir):
+            if os.stat(datadir).st_uid != self.user.pw_uid or \
+                            os.stat(datadir).st_gid != self.user.pw_gid:
+                raise Exception('Dir %s is not owner by %s' % (datadir, self.user.pw_name))
             for root, dirs, files in os.walk(datadir):
                 if dirs or files:
                     raise Exception('Data dir is not empty')
                 else:
                     break
-        else:
-            os.makedirs(datadir, mode=0755)
-        self.chown(datadir)
-        try:
-            yield
-        except Exception as e:
-            try:
-                os.rmdir(datadir)
-            except Exception:
-                pass
-            raise e
-
+            os.rmdir(datadir)
+        yield
     def generate_cmd(self):
         pass
 
