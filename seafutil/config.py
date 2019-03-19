@@ -101,7 +101,7 @@ database_init_opts = [
                help='Database root password'),
     cfg.BoolOpt('create',
                 default=True,
-                help='create new database or use mysql existing database'),
+                help='create new database schema or use existing database schema'),
     cfg.BoolOpt('debug',
                 default=False,
                 help='connect database use debug mode'),

@@ -73,15 +73,15 @@ systemctl stop seafile.service
 
 
 %postun
-/usr/sbin/userdel seafile
+/usr/sbin/userdel seafile > /dev/null
 
 
 %files
 %defattr(-,root,root,-)
 %{_bindir}/*
 %{_sbindir}/seafile-init-*
-%{_sysconfdir}/seafile.conf
-%{_sysconfdir}/sysconfig/seafile
+%config(noreplace) %{_sysconfdir}/seafile.conf
+%config(noreplace) %{_sysconfdir}/sysconfig/seafile
 %{_unitdir}/seafile.service
 %{py_sitedir}/%{proj_name}/*
 %dir %{py_sitedir}/%{proj_name}-%{version}-*.egg-info/
