@@ -60,7 +60,7 @@ luanch_opts = [
 base_init_opts = [
     cfg.StrOpt('user',
                default='seafile',
-               help='eseafile process running user'),
+               help='seafile process running user'),
     cfg.StrOpt('group',
                default='seafile',
                help='seafile process running group'),
@@ -93,6 +93,9 @@ database_init_opts = [
     cfg.StrOpt('scope',
                default='127.0.0.1',
                help='Database user name scope'),
+    cfg.StrOpt('rname',
+               default='root',
+               help='Database root name'),
     cfg.StrOpt('rpass',
                secret=True,
                help='Database root password'),

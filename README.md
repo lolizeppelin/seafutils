@@ -1,7 +1,9 @@
 # Seafile 服务端部署工具
 
 ### 使用说明
-seafile-init-* 是对应程序初始化脚本
+seafile-init-* 是对应程序初始化脚本,必须由root执行
+如果需要后续程序以非seafile用户运行,需要在init阶段指定用户
+否则需要手动修改生成的文件夹权限
 seafile-luanch 是服务器启动的代理脚本,用于启动和关闭seafile-controller,由systemd调用
 
 
