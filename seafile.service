@@ -1,7 +1,7 @@
 [Unit]
-Description=Seafile
-Requires=ccnet.target
-After=ccnet.target
+Description=Seafile Server
+Requires=ccnet.service
+After=ccnet.service
 
 [Service]
 LimitNOFILE=10000

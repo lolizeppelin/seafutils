@@ -1,5 +1,5 @@
 [Unit]
-Description=Seafile
+Description=Seafile Ccnet
 After=network.target
 
 [Service]

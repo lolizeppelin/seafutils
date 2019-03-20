@@ -113,6 +113,7 @@ sed -i -e 's|%{buildroot}||g' %{buildroot}%{_libdir}/pkgconfig/lib%{name}.pc
 
 %files
 %doc README.markdown
+%doc doc/seafile-tutorial.doc
 %{python2_sitearch}/%{name}
 
 %files server

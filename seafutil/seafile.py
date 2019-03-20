@@ -1,4 +1,6 @@
 import os
+import glob
+import shutil
 import contextlib
 import subprocess
 from ConfigParser import ConfigParser
@@ -20,18 +22,25 @@ class SeafileCommand(SeafCommand):
 
     DATADIR = 'seafile-data'
 
-    def execute(self):
+    DOCPATH = '/usr/share/doc/seafile'
 
-        def execute(self):
-            with self.database.prepare():
-                sub = subprocess.Popen(executable=self.EXECFILE, args=self.generate_cmd(),  preexec_fn=self.pre_exec)
-                code = sub.wait()
-                if code != 0:
-                    raise ValueError('execute seaf-server-init fail')
-            datadir = os.path.join(CONF.datadir, self.DATADIR)
-            os.makedirs(datadir)
-            self.chown(datadir)
-            os.chmod(datadir, 0700)
+    def execute(self):
+        with self.database.prepare():
+            sub = subprocess.Popen(executable=self.EXECFILE, args=self.generate_cmd(),  preexec_fn=self.pre_exec)
+            code = sub.wait()
+            if code != 0:
+                raise ValueError('execute seaf-server-init fail')
+            template_dir = os.path.join(CONF.datadir, self.DATADIR, 'library-template')
+            os.makedirs(template_dir)
+            self.chown(template_dir)
+            for filename in os.listdir(self.DOCPATH):
+                if filename.endswith('.doc'):
+                    src = os.path.join(self.DOCPATH, filename)
+                    dst = os.path.join(template_dir, filename)
+                    if os.path.isfile(src):
+                        shutil.copy(src, dst)
+                        self.chown(dst)
+
 
     def generate_cmd(self):
 

@@ -14,6 +14,15 @@ class SeafCommand(object):
 
     def __init__(self):
 
+        try:
+            self.user = pwd.getpwnam(CONF.user)
+            self.group = grp.getgrnam(CONF.group)
+        except KeyError:
+            raise ValueError('Group or user can not be found')
+        else:
+            if self.user.pw_gid != self.group.gr_gid:
+                raise ValueError('User gid not eq group id')
+
         if CONF.datadir == '/':
             raise ValueError('Datadir value error')
         if '.' in CONF.datadir:
@@ -23,15 +32,6 @@ class SeafCommand(object):
         if os.stat(CONF.datadir).st_uid != self.user.pw_uid or \
                         os.stat(CONF.datadir).st_gid != self.user.pw_gid:
             raise Exception('Dir %s is not owner by %s' % (CONF.datadir, self.user.pw_name))
-
-        try:
-            self.user = pwd.getpwnam(CONF.user)
-            self.group = grp.getgrnam(CONF.group)
-        except KeyError:
-            raise ValueError('Group or user can not be found')
-        else:
-            if self.user.pw_gid != self.group.gr_gid:
-                raise ValueError('User gid not eq group id')
 
         import_str = 'seafutil.dbengine.%s' % CONF.engine
         __import__(import_str)

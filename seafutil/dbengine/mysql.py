@@ -75,6 +75,6 @@ class DbEngine(DbEngineBase):
             self.create_user()
             yield
         except Exception as e:
-            self.drop_user()
             self.drop_db()
+            self.drop_user()
             raise e
