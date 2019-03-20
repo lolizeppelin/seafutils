@@ -74,6 +74,7 @@ fi
 
 %preun
 systemctl stop seafile.service
+systemctl stop ccnet.service
 
 
 %postun
