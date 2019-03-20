@@ -98,8 +98,8 @@ class Luanch():
         args = [CCNET,
                 '-F', CONF.cfgdir,
                 '-c', os.path.join(CONF.datadir, CcnetCommand.DATADIR),
+                '-f', os.path.join(CONF.logdir, 'ccnet-server.log'),
                 '-d',
-                '-l', os.path.join(CONF.logdir, 'ccnet-server.log'),
                 '-P', self.pidfile
                 ]
 
@@ -154,7 +154,7 @@ class Luanch():
 
 def main():
     cfile = CONF.config
-    pidfile = CONF.pid
+    pidfile = CONF.pidfile
     timeout = CONF.timeout
 
     action = CONF.action
