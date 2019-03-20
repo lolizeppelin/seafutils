@@ -17,7 +17,8 @@ EXECFILE = '/usr/bin/seafile-controller'
 CONF.register_cli_opts(config.luanch_opts)
 CONF(project='seafutil-luanch')
 
-P = object()
+class P(object):
+    pid = None
 
 
 class SignalHandler(object):
@@ -32,12 +33,13 @@ class SignalHandler(object):
                                      and name not in self.IGNORE)
 
     def handle_signal(self, handle):
-        for signo in self._signals_by_name.values():
+        for signame in ('SIGTERM', 'SIGHUP', 'SIGINT'):
+            signo = self._signals_by_name[signame]
             signal.signal(signo, handle)
 
 
 def check(cfile, pidfile):
-    pass
+    return True
 
 
 def handle_exitstatus(sts, _WIFSIGNALED=os.WIFSIGNALED,
@@ -68,7 +70,7 @@ def luanch(pidfile, timeout=5):
         P.pid = pid
 
         def kill(signo, frame):
-            if hasattr(P, 'pid'):
+            if P.pid is not None:
                 os.kill(P.pid, signal.SIGKILL)
 
         SignalHandler().handle_signal(kill)
@@ -160,7 +162,7 @@ def write_pid(pidfile):
 
 def main():
     cfile = CONF.config
-    pidfile = CONF.pidfie
+    pidfile = CONF.pid
     timeout = CONF.timeout
 
     action = CONF.action
