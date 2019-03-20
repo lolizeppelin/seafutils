@@ -28,6 +28,10 @@ class SeafileCommand(SeafCommand):
                 code = sub.wait()
                 if code != 0:
                     raise ValueError('execute seaf-server-init fail')
+            datadir = os.path.join(CONF.datadir, self.DATADIR)
+            os.makedirs(datadir)
+            self.chown(datadir)
+            os.chmod(datadir, 0700)
 
     def generate_cmd(self):
 

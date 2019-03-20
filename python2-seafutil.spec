@@ -42,6 +42,7 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 %{__install} -D -m 0644 -p etc/seafile.conf -t %{buildroot}%{_sysconfdir}
 %{__install} -D -m 0644 -p etc/sysconfig/seafile -t %{buildroot}%{_sysconfdir}/sysconfig
 %{__install} -D -m 0644 -p seafile.service %{buildroot}%{_unitdir}/seafile.service
+%{__install} -D -m 0644 -p ccnet.service %{buildroot}%{_unitdir}/ccnet.service
 
 
 mkdir -p %{buildroot}%{_sysconfdir}/seafile
@@ -88,6 +89,7 @@ fi
 %config(noreplace) %{_sysconfdir}/seafile.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/seafile
 %{_unitdir}/seafile.service
+%{_unitdir}/ccnet.service
 %{py_sitedir}/%{proj_name}/*
 %dir %{py_sitedir}/%{proj_name}-%{version}-*.egg-info/
 %{py_sitedir}/%{proj_name}-%{version}-*.egg-info/*

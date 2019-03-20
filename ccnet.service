@@ -1,16 +1,16 @@
 [Unit]
 Description=Seafile
-After=ccnet.target
+After=network.target
 
 [Service]
 LimitNOFILE=10000
 EnvironmentFile=/etc/sysconfig/seafile
 Type=forking
-PIDFile=/run/seafile-server.pid
+PIDFile=/run/ccnet-server.pid
 GuessMainPID=no
 User=seafile
 Group=seafile
-ExecStart=/usr/bin/seafutil-luanch --action seafile --config ${CONFIGFILE} -p ${PIDFile} -t 5
+ExecStart=/usr/bin/seafutil-luanch --action ccnet --config ${CONFIGFILE} -p ${PIDFile} -t 5
 TimeoutStartSec=6
 TimeoutStopSec=30
 

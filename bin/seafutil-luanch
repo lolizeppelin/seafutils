@@ -2,7 +2,6 @@
 import os
 import sys
 import time
-import psutil
 import signal
 import errno
 from oslocfg import cfg
@@ -12,13 +11,11 @@ from seafutil.ccnet import CcnetCommand
 
 CONF = cfg.CONF
 
-EXECFILE = '/usr/bin/seafile-controller'
+SEAFILE = '/usr/bin/seaf-server'
+CCNET = '/usr/bin/ccnet-server'
 
 CONF.register_cli_opts(config.luanch_opts)
 CONF(project='seafutil-luanch')
-
-class P(object):
-    pid = None
 
 
 class SignalHandler(object):
@@ -56,109 +53,94 @@ def handle_exitstatus(sts, _WIFSIGNALED=os.WIFSIGNALED,
         raise RuntimeError("Unknown child exit status!")
 
 
-def luanch(pidfile, timeout=5):
-    args = [EXECFILE,
-            '-F', CONF.cfgdir,
-            '-c', os.path.join(CONF.cfgdir, CcnetCommand.DATADIR),
-            '-d', os.path.join(CONF.cfgdir, SeafileCommand.DATADIR),
-            '-l', CONF.logdir, '-g', CONF.loglevel, '-G', CONF.loglevel]
+class Luanch():
 
-    pid = os.fork()
-    if pid == 0:
-        os.execv(EXECFILE, args)
-    else:
-        P.pid = pid
 
-        def kill(signo, frame):
-            if P.pid is not None:
-                os.kill(P.pid, signal.SIGKILL)
+    def __init__(self, action, pidfile):
+        self.pid = None
+        self.action = action
+        self.pidfile = pidfile
 
-        SignalHandler().handle_signal(kill)
-        overtime = time.time() + timeout - 0.1
-        while 1:
-            if time.time() > overtime:
-                os.kill(pid, signal.SIGKILL)
-                os.wait()
-                import logging
-                logging.error('Luanch seafie controller overtime')
-                return False
-            try:
-                _pid, sts = os.waitpid(pid, 0)
-            except OSError as e:
-                if e.errno != errno.ECHILD:
-                    raise
-                return True
-            if _pid:
-                code = handle_exitstatus(sts)
-                if code == 0:
-                    return True
-                else:
+    def seafile(self):
+        """
+        char *argv[] = {
+            "seaf-server",
+            "-F", ctl->central_config_dir,
+            "-c", ctl->config_dir,
+            "-d", ctl->seafile_dir,
+            "-l", logfile,
+            "-P", ctl->pidfile[PID_SERVER],
+            NULL};
+        """
+
+        args = [SEAFILE,
+                '-F', CONF.cfgdir,
+                '-c', os.path.join(CONF.datadir, CcnetCommand.DATADIR),
+                '-d', os.path.join(CONF.datadir, SeafileCommand.DATADIR),
+                '-l', os.path.join(CONF.logdir, 'seafile-server.log'),
+                '-P', self.pidfile
+                ]
+
+        return args
+
+    def ccnet(self):
+        """
+        char *argv[] = {
+            "ccnet-server",
+            "-F", ctl->central_config_dir,
+            "-c", ctl->config_dir,
+            "-f", logfile,
+            "-d",
+            "-P", ctl->pidfile[PID_CCNET],
+            NULL};
+        """
+        args = [CCNET,
+                '-F', CONF.cfgdir,
+                '-c', os.path.join(CONF.datadir, CcnetCommand.DATADIR),
+                '-d',
+                '-l', os.path.join(CONF.logdir, 'ccnet-server.log'),
+                '-P', self.pidfile
+                ]
+
+        return args
+
+    def start(self, timeout):
+        func = getattr(self, self.action)
+        args = func()
+        pid = os.fork()
+        if pid == 0:
+            os.execv(args[0], args)
+        else:
+            self.pid = pid
+
+            def kill(signo, frame):
+                if self.pid is not None:
+                    os.kill(self.pid, signal.SIGKILL)
+
+            SignalHandler().handle_signal(kill)
+            overtime = time.time() + timeout - 0.1
+            while 1:
+                if time.time() > overtime:
+                    os.kill(pid, signal.SIGKILL)
+                    os.wait()
                     import logging
-                    logging.error('Seafie controller exit status %d' % code)
+                    logging.error('Luanch seafie controller overtime')
                     return False
-            time.sleep(0.01)
-
-
-def send_signal_to_process_list(plist, sig=signal.SIGTERM):
-    for i in range(len(plist) - 1, -1, -1):
-        try:
-            if sig:
-                os.kill(plist[i].pid, signal.sig)
-            else:
-                # check process by psutil.Process.status()
-                plist[i].status()
-        except psutil.NoSuchProcess:
-            if sig != signal.SIGKILL:
-                del [i]
-            continue
-        finally:
-            if sig == signal.SIGKILL:
-                del [i]
-
-
-def stop(timeout=25):
-    """
-    ExecStopPost=/usr/bin/
-        pkill -f "ccnet-server -c ${seafile_ccnet}"
-        pkill -f "seaf-server -c ${seafile_ccnet}"
-        pkill -f "fileserver -c ${seafile_ccnet}"
-        pkill -f "soffice.*--invisible --nocrashreport"
-        pkill -f  "wsgidav.server.run_server"
-    """
-    overtime = time.time() + timeout - 0.1
-    plist = []
-
-    if not plist:
-        return
-
-    def kill_by_9(signo, frame):
-        """ For systemd signal"""
-        send_signal_to_process_list(plist, signal.SIGKILL)
-        sys.exit(1)
-    SignalHandler().handle_signal(kill_by_9)
-
-    send_signal_to_process_list(plist)
-    while plist:
-        send_signal_to_process_list(plist, 0)
-        if not plist:
-            break
-        if time.time() > overtime:
-            send_signal_to_process_list(plist, signal.SIGKILL)
-            sys.exit(1)
-        time.sleep(0.01)
-    else:
-        return
-
-
-def write_pid(pidfile):
-    """find pid"""
-    # try:
-    #     proc = psutil.Process(P.pid)
-    # except psutil.NoSuchProcess:
-    #     import logging
-    #     logging.error('Seafie controller not exit after start')
-    #     return False
-
+                try:
+                    _pid, sts = os.waitpid(pid, 0)
+                except OSError as e:
+                    if e.errno != errno.ECHILD:
+                        raise
+                    return True
+                if _pid:
+                    code = handle_exitstatus(sts)
+                    if code == 0:
+                        return True
+                    else:
+                        import logging
+                        logging.error('Seafie controller exit status %d' % code)
+                        return False
+                time.sleep(0.01)
 
 def main():
     cfile = CONF.config
@@ -169,19 +151,15 @@ def main():
 
     CONF.reset()
     CONF.register_cli_opts(config.server_opts)
-    CONF(project='seafile-controller', default_config_files=[cfile, ])
+    CONF(project='seafile-%s' % action, default_config_files=[cfile, ])
 
-    if action == 'start':
-        if not check(cfile, pidfile):
-            sys.exit(1)
-        if luanch(timeout):
-            write_pid(pidfile)
-            sys.exit(0)
-        else:
-            sys.exit(1)
-    elif action == 'stop':
-        stop(timeout)
-
+    if not check(cfile, pidfile):
+        sys.exit(1)
+    luanch = Luanch(action, pidfile)
+    if luanch.start(timeout):
+        sys.exit(0)
+    else:
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()

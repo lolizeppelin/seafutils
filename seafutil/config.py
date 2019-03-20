@@ -17,10 +17,10 @@ server_opts = [
     cfg.StrOpt('logdir',
                default='/var/log/seafile',
                help='Seafile log path'),
-    cfg.StrOpt('loglevel',
-               default='info',
-               choices=['info', 'notice', 'warning', 'debug'],
-               help='Seafile log level'),
+    # cfg.StrOpt('loglevel',
+    #            default='info',
+    #            choices=['info', 'notice', 'warning', 'debug'],
+    #            help='Seafile log level'),
     cfg.StrOpt('datadir',
                required=True,
                regex='',
@@ -36,9 +36,9 @@ server_opts = [
 
 # options for server-luanch
 luanch_opts = [
-    cfg.StrOpt('action',
+    cfg.StrOpt('bin',
                required=True,
-               choices=['start', 'stop'],
+               choices=['seafile', 'ccnet'],
                help='Seafile luanch type'),
     cfg.StrOpt('config',
                short='c',
@@ -47,11 +47,11 @@ luanch_opts = [
     cfg.StrOpt('pid',
                short='p',
                required=True,
-               help='Seafile controller process pid file'),
+               help='Process pid file'),
     cfg.IntOpt('timeout',
                short='t',
                default=5,
-               min=1, max=10,
+               min=1, max=30,
                help='Seafile controller luanch timeout'),
 
 ]
