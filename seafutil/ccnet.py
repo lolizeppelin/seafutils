@@ -56,7 +56,7 @@ class CcnetCommand(SeafCommand):
             config.set(section, 'CONNECTION_CHARSET', 'utf8')
             with open(cfile, 'wb') as f:
                 config.write(f)
-            os.chown(cfile)
+            self.chown(cfile)
             try:
                 yield
             except Exception as e:

@@ -59,7 +59,8 @@ class SeafCommand(object):
         try:
             yield
         except Exception as e:
-            shutil.rmtree(datadir)
+            if os.path.exists(datadir):
+                shutil.rmtree(datadir)
             raise e
 
     def generate_cmd(self):

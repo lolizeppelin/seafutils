@@ -44,18 +44,17 @@ class SeafileCommand(SeafCommand):
     @contextlib.contextmanager
     def generate_conf(self):
 
-        if os.path.exists(CONF.cfgdir, FILENAME):
+        if os.path.exists(os.path.join(CONF.cfgdir, FILENAME)):
             raise Exception('config file exist!')
-        if os.path.exists(CONF.cfgdir, FILENAME2):
+        if os.path.exists(os.path.join(CONF.cfgdir, FILENAME2)):
             raise Exception('config file2 exist!')
-        if os.path.join(CONF.datadir, CcnetCommand.DATADIR, FILENAME2):
-            raise Exception('config file3 exist!')
+
         ccdatadir = os.path.join(CONF.datadir, CcnetCommand.DATADIR)
         if not os.path.exists(ccdatadir) or not os.path.isdir(ccdatadir):
             raise Exception('Ccnet not init finish?')
         if os.stat(ccdatadir).st_uid != self.user.pw_uid or os.stat(ccdatadir).st_gid != self.user.pw_gid:
             raise Exception('Dir %s is not owner by %s' % (ccdatadir, self.user.pw_name))
-        if os.path.exists(os.path.join(CONF.datadir, CcnetCommand.DATADIR, FILENAME3)):
+        if os.path.exists(os.path.join(ccdatadir, FILENAME3)):
             raise Exception('Config seafie.ini exist')
 
         with self.prepare_datadir():
