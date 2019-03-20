@@ -47,7 +47,6 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 mkdir -p %{buildroot}%{_sysconfdir}/seafile
 mkdir -p %{buildroot}/var/log/seafile
-mkdir -p %{buildroot}/run/seafile
 
 
 for l in bin/*;do
@@ -101,7 +100,6 @@ fi
 %doc etc/uwsgi.d/seahub.ini
 %defattr(-,seafile,seafile,-)
 %dir /var/log/seafile
-%dir /run/seafile
 
 %changelog
 * Fri Mar 15 2019 Lolizeppelin <lolizeppelin@gmail.com> - 1.0.0

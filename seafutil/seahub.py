@@ -14,7 +14,7 @@ FILENAME = 'seahub_settings.py'
 
 template = '''\
 # -*- coding: utf-8 -*-\n
-SECRET_KEY = %(key)s\n
+SECRET_KEY = '%(key)s'\n
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.%(engine)s',
@@ -76,7 +76,7 @@ class SeahubCommand(SeafCommand):
         # backup avatars
         shutil.move(orig_avatar_dir, orig_avatar_dir_default)
         # copy to dst
-        shutil.copy(orig_avatar_dir_default, dest_avatar_dir)
+        shutil.copytree(orig_avatar_dir_default, dest_avatar_dir)
         # change owner
         self.chown(dest_avatar_dir)
         # make symlink
