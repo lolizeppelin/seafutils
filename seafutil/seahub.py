@@ -1,5 +1,5 @@
 import os
-import contextlib
+import subprocess
 import shutil
 import contextlib
 from oslocfg import cfg
@@ -45,7 +45,7 @@ class SeahubCommand(SeafCommand):
 
 
         with self.prepare_datadir():
-            conf = CONF[NAME]
+            conf = CONF
             cfile = os.path.join(CONF.cfgdir, FILENAME)
             text = template % dict(key=CONF.hubkey,
                                    name=conf.dbname,
@@ -56,6 +56,7 @@ class SeahubCommand(SeafCommand):
                                    port=conf.dbport)
             with open(cfile, 'w') as f:
                 f.write(text)
+            self.chown(cfile)
             try:
                 yield
             except Exception as e:
@@ -65,7 +66,7 @@ class SeahubCommand(SeafCommand):
 
     @contextlib.contextmanager
     def prepare_avatar_dir(self):
-        media_dir = os.path.join(CONF, 'seahub', 'media')
+        media_dir = os.path.join(CONF.seahub, 'media')
         orig_avatar_dir = os.path.join(media_dir, 'avatars')
         orig_avatar_dir_default = os.path.join(media_dir, 'avatars.default')
 
@@ -94,4 +95,12 @@ class SeahubCommand(SeafCommand):
     def execute(self):
         with self.prepare_avatar_dir():
             with self.database.prepare():
-                pass
+                sqlfile = os.path.join(CONF.seahub, 'sql', 'mysql.sql')
+                info = dict(user=CONF.dbuser, passwd=CONF.dbpass,
+                            host=CONF.dbhost, port=CONF.dbport,
+                            schema=CONF.dbname, sqlfile=sqlfile)
+                command = 'mysql -u%(user)s -p%(passwd)s -h%(host)s -P %(port)d %(schema)s < %(sqlfile)s' % info
+                sub = subprocess.Popen(command, shell=True)
+                code = sub.wait()
+                if code != 0:
+                    raise ValueError('Run init sql fail')
