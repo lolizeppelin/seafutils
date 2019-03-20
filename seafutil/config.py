@@ -36,7 +36,7 @@ server_opts = [
 
 # options for server-luanch
 luanch_opts = [
-    cfg.StrOpt('bin',
+    cfg.StrOpt('action',
                required=True,
                choices=['seafile', 'ccnet'],
                help='Seafile luanch type'),
@@ -44,8 +44,7 @@ luanch_opts = [
                short='c',
                required=True,
                help='Seafile luanch config file'),
-    cfg.StrOpt('pid',
-               short='p',
+    cfg.StrOpt('pidfile',
                required=True,
                help='Process pid file'),
     cfg.IntOpt('timeout',

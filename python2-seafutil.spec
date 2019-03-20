@@ -2,7 +2,7 @@
 
 %global debug_package %{nil}
 %define proj_name seafutil
-%define _release 18
+%define _release 20
 
 Name:           python2-%{proj_name}
 Version:        1.0.0

@@ -57,7 +57,6 @@ def handle_exitstatus(sts, _WIFSIGNALED=os.WIFSIGNALED,
 
 class Luanch():
 
-
     def __init__(self, action, pidfile):
         self.pid = None
         self.action = action
@@ -148,8 +147,10 @@ class Luanch():
                     else:
                         import logging
                         logging.error('Seafie controller exit status %d' % code)
+                        logging.error(' '.join(args))
                         return False
                 time.sleep(0.01)
+
 
 def main():
     cfile = CONF.config

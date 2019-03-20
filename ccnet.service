@@ -10,7 +10,7 @@ PIDFile=/run/ccnet-server.pid
 GuessMainPID=no
 User=seafile
 Group=seafile
-ExecStart=/usr/bin/seafutil-luanch --action ccnet --config ${CONFIGFILE} -p ${PIDFile} -t 5
+ExecStart=/usr/bin/seafutil-luanch --action ccnet --config ${CONFIGFILE} -pidfile /run/ccnet-server.pid -t 5
 TimeoutStartSec=6
 TimeoutStopSec=30
 

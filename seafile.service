@@ -1,5 +1,6 @@
 [Unit]
 Description=Seafile
+Requires=ccnet.target
 After=ccnet.target
 
 [Service]
@@ -10,7 +11,7 @@ PIDFile=/run/seafile-server.pid
 GuessMainPID=no
 User=seafile
 Group=seafile
-ExecStart=/usr/bin/seafutil-luanch --action seafile --config ${CONFIGFILE} -p ${PIDFile} -t 5
+ExecStart=/usr/bin/seafutil-luanch --action seafile --config ${CONFIGFILE} -pidfile /run/seafile-server.pid -t 5
 TimeoutStartSec=6
 TimeoutStopSec=30
 
