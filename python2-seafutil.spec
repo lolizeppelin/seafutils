@@ -2,7 +2,7 @@
 
 %global debug_package %{nil}
 %define proj_name seafutil
-%define _release 14
+%define _release 18
 
 Name:           python2-%{proj_name}
 Version:        1.0.0
@@ -39,7 +39,7 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 %install
 %{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 
-%{__install} -D -m 0640 -p etc/seafile.conf -t %{buildroot}%{_sysconfdir}
+%{__install} -D -m 0644 -p etc/seafile.conf -t %{buildroot}%{_sysconfdir}
 %{__install} -D -m 0644 -p etc/sysconfig/seafile -t %{buildroot}%{_sysconfdir}/sysconfig
 %{__install} -D -m 0644 -p seafile.service %{buildroot}%{_unitdir}/seafile.service
 

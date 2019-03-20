@@ -20,6 +20,9 @@ class SeafCommand(object):
             raise ValueError('Datadir value error')
         if not os.path.exists(CONF.datadir):
             raise ValueError('Path %s not exist' % CONF.datadir)
+        if os.stat(CONF.datadir).st_uid != self.user.pw_uid or \
+                        os.stat(CONF.datadir).st_gid != self.user.pw_gid:
+            raise Exception('Dir %s is not owner by %s' % (CONF.datadir, self.user.pw_name))
 
         try:
             self.user = pwd.getpwnam(CONF.user)
