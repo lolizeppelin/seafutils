@@ -2,6 +2,8 @@
 import os
 import sys
 import time
+import gc
+import resource
 import signal
 import errno
 from oslocfg import cfg
@@ -107,10 +109,17 @@ class Luanch():
     def start(self, timeout):
         func = getattr(self, self.action)
         args = func()
+
+        soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+        gc_was_enabled = gc.isenabled()
+        gc.disable()
         pid = os.fork()
         if pid == 0:
+            os.closerange(3, soft)
             os.execv(args[0], args)
         else:
+            if gc_was_enabled:
+                gc.enable()
             self.pid = pid
 
             def kill(signo, frame):
