@@ -24,7 +24,20 @@ DATABASES = {
         'HOST': '%(host)s',
         'PORT': '%(port)s'
     }
-}'''
+}\n
+CACHES = {
+    'default': {
+        'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
+        'LOCATION': '/run/seafile/memcached.sock',
+    },
+    'locmem': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+}\n
+COMPRESS_CACHE_BACKEND = 'locmem'\n
+ENABLE_RESUMABLE_FILEUPLOAD = True\n
+SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER  = False\n
+'''
 
 def make_symlink(source, target):
     # get symlink

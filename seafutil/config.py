@@ -65,6 +65,18 @@ base_init_opts = [
                help='seafile process running group'),
 ]
 
+
+admin_init_opts = [
+    cfg.StrOpt('email',
+               required=True,
+               regex=r"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b",
+               help='Admin email address'),
+    cfg.StrOpt('passwd',
+               max_length=16,
+               required=True,
+               help='Admin password'),
+]
+
 database_init_opts = [
     cfg.StrOpt('engine',
                default='mysql',
