@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+    <short>Seafile Server</short>
+    <description>Seafile is an open source cloud storage system</description>
+    <port protocol="tcp" port="8082"/>
+</service>

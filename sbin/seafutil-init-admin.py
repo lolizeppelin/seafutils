@@ -33,6 +33,7 @@ def main():
         sys.stderr.flush()
         sys.exit(1)
     CONF.register_cli_opts(config.server_opts)
+    CONF.register_cli_opts(config.admin_init_opts)
     CONF(project='seafile-init-admin', default_config_files=['/etc/seafile.conf', ])
     rpclient = RPC()
     if rpclient.noadmin:

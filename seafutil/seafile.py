@@ -12,7 +12,6 @@ from seafutil.ccnet import CcnetCommand
 CONF = cfg.CONF
 NAME = 'seafile'
 FILENAME = 'seafile.conf'
-FILENAME2 = 'seafdav.conf'
 FILENAME3 = 'seafile.ini'
 
 class SeafileCommand(SeafCommand):
@@ -59,8 +58,6 @@ class SeafileCommand(SeafCommand):
 
         if os.path.exists(os.path.join(CONF.cfgdir, FILENAME)):
             raise Exception('config file exist!')
-        if os.path.exists(os.path.join(CONF.cfgdir, FILENAME2)):
-            raise Exception('config file2 exist!')
 
         ccdatadir = os.path.join(CONF.datadir, CcnetCommand.DATADIR)
         if not os.path.exists(ccdatadir) or not os.path.isdir(ccdatadir):
@@ -87,19 +84,6 @@ class SeafileCommand(SeafCommand):
                 config.write(f)
             self.chown(cfile)
 
-            cfile2 = os.path.join(CONF.cfgdir, FILENAME2)
-            section = 'WEBDAV'
-            config = ConfigParser()
-            config.add_section(section)
-            config.set(section, 'enabled', 'false')
-            config.set(section, 'port', str(conf.devport))
-            config.set(section, 'fastcgi', 'true')
-            config.set(section, 'share_name', '/')
-
-            with open(cfile2, 'wb') as f:
-                config.write(f)
-            self.chown(cfile2)
-
             cfile3 = os.path.join(CONF.datadir, CcnetCommand.DATADIR, FILENAME3)
             with open(cfile3, 'w') as fp:
                 fp.write(os.path.join(CONF.datadir, self.DATADIR))
@@ -109,6 +93,5 @@ class SeafileCommand(SeafCommand):
                 yield
             except Exception as e:
                 os.remove(cfile)
-                os.remove(cfile2)
                 os.remove(cfile3)
                 raise e

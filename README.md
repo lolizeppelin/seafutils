@@ -33,7 +33,35 @@ hubkey    seahub所用的加密key,建议参考官网的key生成方式用随机
 
 ### DOC
 ```text
-第一层目录的脚本从seafile官网的部署包中复制,作为制作本包的参考
+conf目录是seahub的uwsgi配置参考
+第script目录从seafile官网的部署包中复制,作为制作本包的参考
 seafile-freebsd-init.sh从freebsd的seafile-server包中提取
 spec目录中的spec文件是对应rpm打包规则文件
+pylibmc.tar.gz是启用memcached的必要插件
 ```
+
+
+### 其他命令
+
+```text
+Firewall 能将不同的网络连接归类到不同的信任级别，Zone 提供了以下几个级别
+drop: 丢弃所有进入的包，而不给出任何响应
+block: 拒绝所有外部发起的连接，允许内部发起的连接
+public: 允许指定的进入连接
+external: 同上，对伪装的进入连接，一般用于路由转发
+dmz: 允许受限制的进入连接
+work: 允许受信任的计算机被限制的进入连接，类似 workgroup
+home: 同上，类似 homegroup
+internal: 同上，范围针对所有互联网用户
+trusted: 信任所有连接
+
+```
+
+
+firewall-cmd --get-default-zone
+
+firewall-cmd --zone=public --add-masquerade
+firewall-cmd --zone=external --remove-masquerade
+firewall-cmd --zone=public --add-forward-port=port=22:proto=tcp:toport=3753
+firewall-cmd --zone=public --add-forward-port=port=22:proto=tcp:toaddr=192.168.1.100
+firewall-cmd --zone=public --add-forward-port=port=22:proto=tcp:toport=2055:toaddr=192.168.1.100

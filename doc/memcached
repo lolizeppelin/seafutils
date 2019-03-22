@@ -1,5 +1,0 @@
-PORT="11211"
-USER="seafile"
-MAXCONN="1024"
-CACHESIZE="128"
-OPTIONS="-s /run/seafile/memcache.sock -a 0666"

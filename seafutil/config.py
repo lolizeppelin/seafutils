@@ -150,6 +150,9 @@ seahub_init_opts = [
     cfg.StrOpt('dbname',
                default='seahub',
                help='seahub database name'),
+    cfg.BoolOpt('memcache',
+                default=True,
+                help='use memcahced as cache'),
 ]
 
 

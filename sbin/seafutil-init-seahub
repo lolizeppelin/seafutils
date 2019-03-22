@@ -22,5 +22,15 @@ def main():
     with initParser.generate_conf():
         initParser.execute()
 
+    thirdpart = os.path.join(CONF.seahub, 'thirdpart')
+    if CONF.memcache:
+        print("######################################")
+        print("tar -xf /usr/share/doc/python2-seafutil/pylibmc.tar -C %s" % thirdpart)
+        print("systemctl edit memcached")
+        print("[Service]")
+        print("EnvironmentFile=/etc/seafile/memcached")
+        print("######################################")
+
+
 if __name__ == '__main__':
     main()

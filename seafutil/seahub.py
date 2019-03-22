@@ -10,9 +10,10 @@ from seafutil.seafile import SeafileCommand
 CONF = cfg.CONF
 NAME = 'seahub'
 FILENAME = 'seahub_settings.py'
+FILENAME2 = 'memcached'
 
 
-template = '''\
+TEMPLATE = '''\
 # -*- coding: utf-8 -*-\n
 SECRET_KEY = '%(key)s'\n
 DATABASES = {
@@ -25,6 +26,11 @@ DATABASES = {
         'PORT': '%(port)s'
     }
 }\n
+ENABLE_RESUMABLE_FILEUPLOAD = True\n
+SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER  = False\n
+'''
+
+MEMCACHED = '''\
 CACHES = {
     'default': {
         'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
@@ -35,9 +41,18 @@ CACHES = {
     },
 }\n
 COMPRESS_CACHE_BACKEND = 'locmem'\n
-ENABLE_RESUMABLE_FILEUPLOAD = True\n
-SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER  = False\n
 '''
+
+
+MEMCACHE = '''\
+PORT="11211"\n
+USER="seafile"\n
+MAXCONN="1024"\n
+CACHESIZE="128"\n
+OPTIONS="-s /run/seafile/memcache.sock -a 0666"\n
+'''
+
+
 
 def make_symlink(source, target):
     # get symlink
@@ -56,24 +71,36 @@ class SeahubCommand(SeafCommand):
     @contextlib.contextmanager
     def generate_conf(self):
 
-
         with self.prepare_datadir():
             conf = CONF
             cfile = os.path.join(CONF.cfgdir, FILENAME)
-            text = template % dict(key=CONF.hubkey,
+            text = TEMPLATE % dict(key=CONF.hubkey,
                                    name=conf.dbname,
                                    engine=conf.engine,
                                    username=conf.dbuser,
                                    password=conf.dbpass,
                                    host=conf.dbhost,
                                    port=conf.dbport)
+            memconf = None
+            if CONF.memcache:
+                text += MEMCACHED
+                memconf = os.path.join(CONF.cfgdir, FILENAME2)
+                if not os.path.exists(memconf):
+                    with open(memconf, 'w') as f:
+                        f.write(MEMCACHE)
+                else:
+                    memconf = None
+
             with open(cfile, 'w') as f:
                 f.write(text)
+
             self.chown(cfile)
             try:
                 yield
             except Exception as e:
                 os.remove(cfile)
+                if memconf:
+                    os.remove(memconf)
                 raise e
 
 
@@ -117,3 +144,7 @@ class SeahubCommand(SeafCommand):
                 code = sub.wait()
                 if code != 0:
                     raise ValueError('Run init sql fail')
+                thumbdir = os.path.join(CONF.seahub, 'seahub', 'thumbnail', 'thumb')
+                if not os.path.exists(thumbdir):
+                    os.makedirs(thumbdir)
+                self.chown(thumbdir)

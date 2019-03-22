@@ -24,6 +24,9 @@ Requires:       seafile-server >= 6.3.4
 Requires:       python2-mysql >= 1.3
 Requires:       python2-sqlalchemy >= 1.2
 Requires:       python2-pg8000 >= 1.12
+Requires:       uwsgi-plugin-python2 >= 2.0
+Requires:       python2-memcached >= 1.5
+Requires:       nginx >= 1.0
 
 
 %description
@@ -96,8 +99,6 @@ fi
 %{py_sitedir}/%{proj_name}-%{version}-*.egg-info/*
 %doc README.md
 %doc doc/*
-%doc etc/nginx/conf.d/seahub.conf
-%doc etc/uwsgi.d/seahub.ini
 %defattr(-,seafile,seafile,-)
 %dir /var/log/seafile
 
