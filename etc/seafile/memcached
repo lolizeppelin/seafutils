@@ -2,7 +2,7 @@
 # systemctl edit memcached
 # [Service]
 # EnvironmentFile=/etc/seafile/memcached
-# Save systemd edit
+# Save systemd edit then restart memcached
 
 PORT="11211"
 USER="seafile"
