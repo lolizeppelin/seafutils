@@ -42,14 +42,15 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 %install
 %{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 
+mkdir -p %{buildroot}%{_sysconfdir}/seafile
+mkdir -p %{buildroot}/var/log/seafile
+
 %{__install} -D -m 0644 -p etc/seafile.conf -t %{buildroot}%{_sysconfdir}
+%{__install} -D -m 0644 -p etc/seafile/memcached -t %{buildroot}%{_sysconfdir}/seafile
 %{__install} -D -m 0644 -p etc/sysconfig/seafile -t %{buildroot}%{_sysconfdir}/sysconfig
 %{__install} -D -m 0644 -p seafile.service %{buildroot}%{_unitdir}/seafile.service
 %{__install} -D -m 0644 -p ccnet.service %{buildroot}%{_unitdir}/ccnet.service
 
-
-mkdir -p %{buildroot}%{_sysconfdir}/seafile
-mkdir -p %{buildroot}/var/log/seafile
 
 
 for l in bin/*;do
@@ -101,6 +102,7 @@ fi
 %doc doc/*
 %defattr(-,seafile,seafile,-)
 %dir /var/log/seafile
+%config(noreplace) %{_sysconfdir}/seafile/memcached
 
 %changelog
 * Fri Mar 15 2019 Lolizeppelin <lolizeppelin@gmail.com> - 1.0.0
