@@ -10,8 +10,9 @@ PIDFile=/run/seafile/ccnet-server.pid
 GuessMainPID=no
 User=seafile
 Group=seafile
+RuntimeDirectoryPreserve=yes
 RuntimeDirectory=seafile
-ExecStart=/usr/bin/seafutil-luanch --action ccnet --config ${CONFIGFILE} --pidfile /run/seafile/ccnet-server.pid -t 5
+ExecStart=/usr/sbin/ddns-notify
 TimeoutStartSec=6
 TimeoutStopSec=30
 

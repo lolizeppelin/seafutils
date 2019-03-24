@@ -82,7 +82,7 @@ systemctl stop ccnet.service
 
 %postun
 if [ "$1" = "0" ] ; then
-    /usr/sbin/userdel seafile > /dev/null
+    /usr/sbin/userdel seafile > /dev/null 2>&1
 fi
 
 
