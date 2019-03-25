@@ -82,7 +82,7 @@ applications that use %{name}.
 
 %prep
 %setup -qn %{name}-server-%{version}-server
-#sed -i -e /\(DESTDIR\)/d %{name}.pc.in
+sed -i -e /\(DESTDIR\)/d lib/lib%{name}.pc.in
 
 
 %build
@@ -98,7 +98,7 @@ applications that use %{name}.
 %install
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
-sed -i -e 's|%{buildroot}||g' %{buildroot}%{_libdir}/pkgconfig/lib%{name}.pc
+#sed -i -e 's|%{buildroot}||g' %{buildroot}%{_libdir}/pkgconfig/lib%{name}.pc
 
 
 %check
