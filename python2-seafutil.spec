@@ -2,7 +2,7 @@
 
 %global debug_package %{nil}
 %define proj_name seafutil
-%define _release 23
+%define _release 24
 
 Name:           python2-%{proj_name}
 Version:        1.0.0
@@ -26,6 +26,7 @@ Requires:       python2-sqlalchemy >= 1.2
 Requires:       python2-pg8000 >= 1.12
 Requires:       uwsgi-plugin-python2 >= 2.0
 Requires:       python2-memcached >= 1.5
+Requires:       python2-pylibmc >= 1.5
 Requires:       nginx >= 1.0
 
 
@@ -93,6 +94,7 @@ fi
 %dir %{_sysconfdir}/seafile
 %config(noreplace) %{_sysconfdir}/seafile.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/seafile
+%config(noreplace) %{_sysconfdir}/seafile/memcached
 %{_unitdir}/seafile.service
 %{_unitdir}/ccnet.service
 %{py_sitedir}/%{proj_name}/*
@@ -102,7 +104,7 @@ fi
 %doc doc/*
 %defattr(-,seafile,seafile,-)
 %dir /var/log/seafile
-%config(noreplace) %{_sysconfdir}/seafile/memcached
+
 
 %changelog
 * Fri Mar 15 2019 Lolizeppelin <lolizeppelin@gmail.com> - 1.0.0

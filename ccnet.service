@@ -1,6 +1,7 @@
 [Unit]
 Description=Seafile Ccnet
 After=network.target
+After=mysqld.service
 
 [Service]
 LimitNOFILE=10000
