@@ -25,7 +25,7 @@ DATABASES = {
         'PORT': '%(port)s'
     }
 }\n
-ENABLE_RESUMABLE_FILEUPLOAD = True\n
+ENABLE_RESUMABLE_FILEUPLOAD = False\n
 SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER  = False\n
 '''
 
