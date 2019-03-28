@@ -1,7 +1,6 @@
 [Unit]
 Description=Seafile Ccnet
-After=network.target
-After=mysqld.service
+After=network.target mysqld.service remote-fs.target nss-lookup.target
 
 [Service]
 LimitNOFILE=10000
