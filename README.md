@@ -57,6 +57,21 @@ trusted: 信任所有连接
 
 ```
 
+### memcached设置
+需要uwsgi在memcached启动后启动,systemctl edit uwsgi.service
+```text
+[Unit]
+Description=uWSGI Emperor Service
+After=syslog.target memcached.service
+```
+或使用uwsig管理memecached,未测试此做法,具体参考uwsgi官方文档
+```test
+[uwsgi]
+master = true
+socket = /run/seafile/seahub-uwsgi.sock
+attach-daemon = memcached -s /run/seafile/memcached.sock -a 0666 -u seafile
+```
+
 
 firewall-cmd --get-default-zone
 
