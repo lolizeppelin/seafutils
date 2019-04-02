@@ -28,6 +28,7 @@ Requires:       uwsgi-plugin-python2 >= 2.0
 Requires:       python2-memcached >= 1.5
 Requires:       python2-pylibmc >= 1.5
 Requires:       nginx >= 1.0
+Requires:       seafile-server = 6.3.4
 
 
 %description

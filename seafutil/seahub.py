@@ -41,6 +41,9 @@ CACHES = {
     },
 }\n
 COMPRESS_CACHE_BACKEND = 'locmem'\n
+THUMBNAIL_IMAGE_SIZE_LIMIT = 100\n
+ENABLE_VIDEO_THUMBNAIL = False\n
+FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024\n
 '''
 
 def make_symlink(source, target):
@@ -90,8 +93,7 @@ class SeahubCommand(SeafCommand):
         orig_avatar_dir = os.path.join(media_dir, 'avatars')
         orig_avatar_dir_default = os.path.join(media_dir, 'avatars.default')
 
-        seahub_data_dir = os.path.join(CONF.datadir, SeafileCommand.DATADIR)
-        dest_avatar_dir = os.path.join(seahub_data_dir, 'avatars')
+        dest_avatar_dir = os.path.join(CONF.datadir, 'avatars')
 
         # backup avatars
         shutil.move(orig_avatar_dir, orig_avatar_dir_default)
@@ -99,6 +101,7 @@ class SeahubCommand(SeafCommand):
         shutil.copytree(orig_avatar_dir_default, dest_avatar_dir)
         # change owner
         self.chown(dest_avatar_dir)
+        self.chown(os.path.join(dest_avatar_dir, 'groups'))
         # make symlink
         make_symlink(dest_avatar_dir, orig_avatar_dir)
 
