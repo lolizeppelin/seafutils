@@ -15,9 +15,9 @@ def main():
         sys.stderr.flush()
         sys.exit(1)
 
-    CONF.register_cli_opts(config.ccnet_opts)
     CONF.register_cli_opts(config.location_opts)
     CONF.register_cli_opts(config.base_init_opts)
+    CONF.register_cli_opts(config.ccnet_opts)
     CONF.register_cli_opts(config.ccnet_init_opts)
     CONF.register_cli_opts(config.database_init_opts)
     CONF(project='seafile-init-ccnet', default_config_files=['/etc/seafile.conf', ])
