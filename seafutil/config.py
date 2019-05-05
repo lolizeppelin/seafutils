@@ -1,7 +1,20 @@
 from oslocfg import cfg
 
+# ----------------- server opts -------------------
+location_opts = [
+    cfg.StrOpt('cfgdir',
+               default='/etc/seafile',
+               help='Seafile config path'),
+    cfg.StrOpt('logdir',
+               default='/var/log/seafile',
+               help='Seafile log path'),
+    cfg.StrOpt('datadir',
+               required=True,
+               regex='',
+                help='Seafile server data path'),
+]
 
-server_opts = [
+ccnet_opts = [
     cfg.StrOpt('name',
                required=True,
                regex=r'^[a-zA-Z0-9_\-]{3,15}$',
@@ -11,20 +24,9 @@ server_opts = [
                required=True,
                regex=r'^[^.].+\..+[^.]$',
                help='Seafile server ip or domain name'),
-    cfg.StrOpt('cfgdir',
-               default='/etc/seafile',
-               help='Seafile config path'),
-    cfg.StrOpt('logdir',
-               default='/var/log/seafile',
-               help='Seafile log path'),
-    # cfg.StrOpt('loglevel',
-    #            default='info',
-    #            choices=['info', 'notice', 'warning', 'debug'],
-    #            help='Seafile log level'),
-    cfg.StrOpt('datadir',
-               required=True,
-               regex='',
-                help='Seafile server data path'),
+]
+
+seahub_opts = [
     cfg.StrOpt('seahub',
                help='Seahub app root path'),
     cfg.StrOpt('hubkey',
@@ -33,6 +35,7 @@ server_opts = [
                max_length=20,
                help='Seahub secret key')
 ]
+# ----------------- server opts -------------------
 
 # options for server-luanch
 luanch_opts = [
@@ -64,7 +67,6 @@ base_init_opts = [
                default='seafile',
                help='seafile process running group'),
 ]
-
 
 admin_init_opts = [
     cfg.StrOpt('email',
@@ -155,6 +157,36 @@ seahub_init_opts = [
                 help='use memcahced as cache'),
 ]
 
+# -----------------gc opts -------------------
+gc_opts = [
+    cfg.StrOpt('config',
+               short='c',
+               default='/etc/seafile.conf',
+               help='Seafile luanch config file'),
+    cfg.StrOpt('ccent',
+               default='/run/seafile/ccnet-server.pid',
+               help='Ccnet pid file'),
+    cfg.StrOpt('seafile',
+               default='/run/seafile/seafile-server.pid',
+               help='Seafile pid file'),
+    cfg.BoolOpt('remove',
+                short='r',
+                default=False,
+                help='use --rm-deleted remove garbaged repos if true else use --dry-run to show'
+                ),
+    cfg.BoolOpt('verbose',
+                short='v',
+                default=False,
+                help='verbose output messages'
+                ),
+    cfg.ListOpt('repos',
+                default=[],
+                # item_type=types.Integer(),
+                help='target repos id list'
+                ),
+]
+# -----------------gc opts -------------------
+
 
 def list_server_opts():
-    return server_opts
+    return ccnet_opts + location_opts + seahub_opts

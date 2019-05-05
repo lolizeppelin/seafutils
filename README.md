@@ -72,11 +72,5 @@ socket = /run/seafile/seahub-uwsgi.sock
 attach-daemon = memcached -s /run/seafile/memcached.sock -a 0666 -u seafile
 ```
 
-
-firewall-cmd --get-default-zone
-
-firewall-cmd --zone=public --add-masquerade
-firewall-cmd --zone=external --remove-masquerade
-firewall-cmd --zone=public --add-forward-port=port=22:proto=tcp:toport=3753
-firewall-cmd --zone=public --add-forward-port=port=22:proto=tcp:toaddr=192.168.1.100
 firewall-cmd --zone=public --add-forward-port=port=22:proto=tcp:toport=2055:toaddr=192.168.1.100
+firewall-cmd --zone=external --add-forward-port=port=7901:proto=tcp:toport=22:toaddr=10.10.0.101

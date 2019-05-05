@@ -6,6 +6,7 @@ import gc
 import resource
 import signal
 import errno
+import psutil
 from oslocfg import cfg
 from seafutil import config
 from seafutil.seafile import SeafileCommand
@@ -18,6 +19,11 @@ CCNET = '/usr/bin/ccnet-server'
 
 CONF.register_cli_opts(config.luanch_opts)
 CONF(project='seafutil-luanch')
+
+EXECDICT = {
+    'ccnet': CCNET,
+    'seafile': SEAFILE,
+}
 
 
 class SignalHandler(object):
@@ -37,7 +43,19 @@ class SignalHandler(object):
             signal.signal(signo, handle)
 
 
-def check(cfile, pidfile):
+def check(action, pidfile):
+    EXEC = EXECDICT.get(action)
+    if not EXEC:
+        return False
+    with open(pidfile, 'r') as f:
+        pid = int(f.read().strip())
+        try:
+            p = psutil.Process(pid)
+            exe = p.exe()
+        except psutil.NoSuchProcess:
+            return True
+        if exe == EXEC:
+            return False
     return True
 
 
@@ -160,10 +178,10 @@ def main():
     action = CONF.action
 
     CONF.reset()
-    CONF.register_cli_opts(config.server_opts)
+    CONF.register_cli_opts(config.location_opts)
     CONF(project='seafile-%s' % action, default_config_files=[cfile, ])
 
-    if not check(cfile, pidfile):
+    if not check(action, pidfile):
         sys.exit(1)
     luanch = Luanch(action, pidfile)
     if luanch.start(timeout):
