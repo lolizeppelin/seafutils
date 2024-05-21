@@ -1,0 +1,13 @@
+#!/usr/bin/python3
+import sys
+import seafutils
+
+
+def main():
+    app = sys.argv[1]
+    sys.argv[1] = '--config-file=/etc/seafile/seafile.conf'
+    seafutils.launch(app)
+
+
+if __name__ == '__main__':
+    main()

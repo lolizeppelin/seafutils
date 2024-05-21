@@ -1,6 +1,6 @@
 [Unit]
 Description=Seafile Ccnet
-After=network.target mysqld.service remote-fs.target nss-lookup.target
+After=network.target postgresql-15.service remote-fs.target nss-lookup.target
 
 [Service]
 LimitNOFILE=10000
@@ -12,9 +12,10 @@ User=seafile
 Group=seafile
 RuntimeDirectoryPreserve=yes
 RuntimeDirectory=seafile
-ExecStart=/usr/bin/seafutil-luanch --action ccnet --config ${CONFIGFILE} --pidfile /run/seafile/ccnet-server.pid -t 5
+ExecStart=/usr/bin/seafile-luanch ccnet --pidfile /run/seafile/ccnet-server.pid -t 5
 TimeoutStartSec=6
 TimeoutStopSec=30
+SuccessExitStatus=1
 
 
 [Install]

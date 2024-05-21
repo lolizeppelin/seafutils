@@ -1,15 +1,16 @@
 [Unit]
 Description=Seafile Server
 Requires=ccnet.service
-After=ccnet.service postgresql-15.service
+After=ccnet.service memcached.service
 
 [Service]
 LimitNOFILE=10000
-Type=simple
+Type=forking
+PIDFile=/run/seafile/seahub-wsgi.pid
 GuessMainPID=no
 User=seafile
 Group=seafile
-ExecStart=/usr/bin/seafile-luanch seafile --pidfile /run/seafile/seafile-server.pid -t 5
+ExecStart=/usr/bin/seafile-luanch seahub -s /run/seafile/seahub.sock --pidfile /run/seafile/seahub-wsgi.pid -t 5
 TimeoutStartSec=6
 TimeoutStopSec=30
 
