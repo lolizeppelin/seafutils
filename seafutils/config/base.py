@@ -19,12 +19,6 @@ base_opts = [
                help='Seafile log path'),
 ]
 
-launch_opts = [
-    cfg.StrOpt('pidfile',
-               required=True,
-               help='Process pid file'),
-]
-
 database_opts = [
     cfg.StrOpt('db',
                default="",
@@ -47,16 +41,6 @@ database_opts = [
                secret=True,
                help='Database admin password'),
 
-]
-
-init_opts = [
-    cfg.StrOpt('admin',
-               default='postgres',
-               help='Database admin user name'),
-    cfg.StrOpt('admin_passwd', short='p',
-               secret=True,
-               default="",
-               help='Database user password'),
 ]
 
 

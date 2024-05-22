@@ -5,6 +5,7 @@ from oslo_config import generator
 path = os.path.dirname(__file__)
 cfgs = (
     ['--namespace', 'seafile', '--output-file', 'etc/seafile/seafile.conf'],
+    ['--namespace', 'seafile.init', '--output-file', 'etc/initialize.conf'],
 )
 
 os.chdir(path)

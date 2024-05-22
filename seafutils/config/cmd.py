@@ -1,8 +1,5 @@
-import copy
 from oslo_config import types
 from oslo_config import cfg
-
-from .base import database_opts
 
 gc_opts = [
     cfg.BoolOpt('remove',
@@ -39,20 +36,27 @@ dump_opts = [
                 help='target repos id list to dump'),
 ]
 
-seafile_init_opts = copy.deepcopy(database_opts) + [
-    cfg.PortOpt('eport',
-                default=8082,
-                help='Seafile file server external port'),
-    cfg.PortOpt('listen',
-                default=12001,
-                choices=[12001],
-                help='Seafile server internal port'),
-    cfg.PortOpt('backdoor',
-                default=8080,
-                help='Seafile development port'),
-    cfg.BoolOpt('debug',
-                default=False,
-                help='Seafile enable development api'),
+launch_opts = [
+    cfg.StrOpt('pidfile',
+               required=True,
+               help='Process pid file'),
 ]
 
-cfg.set_defaults(seafile_init_opts, user='seafile')
+
+launch_seahub_opts = [
+    cfg.BoolOpt('debug',
+                default=False,
+                help='gunicorn log level'),
+    cfg.IntOpt('workers',
+               default=4,
+               min=1, max=128,
+               help='gunicorn process number'),
+    cfg.IPOpt('listen', short='l',
+              default='0.0.0.0',
+              help='wsgi server listen address'),
+    cfg.PortOpt('port',
+                default=8080,
+                help='wsgi server listen port'),
+    cfg.StrOpt('unix_socket', short='s',
+               help='wsgi server listen on unix socket, e.g /tmp/seahub.sock'),
+]

@@ -3,29 +3,18 @@ import os
 from oslo_config import cfg
 from distutils.spawn import find_executable
 
-from seafutils.config.seahub import launch_opts
+from seafutils.config.cmd import launch_opts, launch_seahub_opts
 
 PYTHON = find_executable("python2")
 
 
 def run():
     """
-    env = CCNET_CONF_DIR=%(datadir)/ccnet-data
-    env = SEAFILE_CONF_DIR=%(datadir)/seafile-data
-    env = SEAFILE_CENTRAL_CONF_DIR=/etc/seafile
-    env = SEAHUB_LOG_DIR=/var/log/seafile
-    env = PYTHONPATH=%(seahubpath):%(seahubpath)/thirdpart
-    env = DJANGO_SETTINGS_MODULE=seahub.settings
-
-    DJANGO_WSGI_MODULE=seahub.wsgi:application # WSGI module name
-
-    gunicorn ${DJANGO_WSGI_MODULE} --workers $NUM_WORKERS --log-level=debug
-    --access-logfile=/tmp/gunicorn-access.log
-    --error-logfile=/tmp/gunicorn-error.log --pid=${PID_FILE} --daemon --preload
-
+    启动seahub
     :return:
     """
     cfg.CONF.register_cli_opts(launch_opts)
+    cfg.CONF.register_cli_opts(launch_seahub_opts)
     cfg.CONF(project='seahub')
 
     third_part = os.path.join(cfg.CONF.website, 'thirdpart')

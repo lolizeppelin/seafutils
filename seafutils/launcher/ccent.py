@@ -1,24 +1,19 @@
 import os
-import sys
 
 from oslo_config import cfg
 from distutils.spawn import find_executable
+
+from seafutils.config.cmd import launch_opts
 
 CCNET = find_executable("ccnet-server")
 
 
 def run():
     """
-    char *argv[] = {
-    "ccnet-server",
-    "-F", ctl->central_config_dir,
-    "-c", ctl->config_dir,
-    "-f", logfile,
-    "-d",
-    "-P", ctl->pidfile[PID_CCNET],
-    NULL};
+    启动ccnet
     :return:
     """
+    cfg.CONF.register_cli_opts(launch_opts)
     cfg.CONF(project='ccnet')
 
     args = (
@@ -29,4 +24,4 @@ def run():
         '-P', cfg.CONF.pidfile,  # pid
         '-d'  # 以守护进程运行
     )
-    os.execv(CCNET, *args)
+    os.execv(CCNET, args)

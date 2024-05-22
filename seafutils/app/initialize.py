@@ -1,6 +1,5 @@
 # 初始化 seafutils-init
 import os
-import pwd
 import random
 import string
 import psycopg
@@ -9,11 +8,9 @@ import subprocess
 from distutils.spawn import find_executable
 from oslo_config import cfg
 
+from seafutils.utils import getuser
 from seafutils.config import templates
-from seafutils.config.base import init_opts
-from seafutils.config.ccnet import ccnet_init_opts
-from seafutils.config.seahub import seahub_init_opts
-from seafutils.config.seafile import seafile_init_opts
+from seafutils.config.initialize import init_opts, ccnet_init_opts, seahub_init_opts, seafile_init_opts
 
 CCNET = find_executable("ccnet-init")
 SEAFILE = find_executable("seaf-server-init")
@@ -29,7 +26,7 @@ def verify(path):
         raise ValueError("path %s not exist" % path)
     if not os.path.isdir(path):
         raise ValueError("path %s not directory" % path)
-    if pwd.getpwuid(os.stat(path).st_uid).pw_name != 'seafile':
+    if getuser(os.stat(path).st_uid).pw_name != 'seafile':
         raise ValueError("path %s owner not seafile" % path)
     for _ in os.scandir(path):
         raise ValueError("path %s is not empty" % path)
@@ -46,8 +43,8 @@ def connect(**kwargs):
 
 @contextlib.contextmanager
 def create_database(conf):
-    admin = conf.admin or cfg.CONF.admin
-    admin_passwd = conf.admin_passwd or cfg.CONF.admin_passwd
+    admin = cfg.CONF.admin or conf.user
+    admin_passwd = cfg.CONF.admin_passwd or conf.passwd
     if not admin_passwd:
         raise ValueError("admin password not found")
     with connect(host=conf.host, port=conf.port, user=admin, password=admin_passwd,
@@ -93,6 +90,10 @@ def cfile(path):
 
 @contextlib.contextmanager
 def init_seafile():
+    """
+    创建seafile配置文件与数据库,调用seafile初始化命令
+    :return:
+    """
     with cfile(os.path.join(cfg.CONF.central, 'seafile.conf')) as f:
         config = templates.seafile()
         config.write(f)
@@ -117,6 +118,10 @@ def init_seafile():
 
 @contextlib.contextmanager
 def init_ccnet():
+    """
+    创建ccnet配置文件与数据库,调用ccnet初始化命令
+    :return:
+    """
     with cfile(os.path.join(cfg.CONF.central, 'seafile.conf')) as f:
         config = templates.ccnet()
         config.write(f)
@@ -138,6 +143,10 @@ def init_ccnet():
 
 
 def init_seahub():
+    """
+    创建seahub配置文件与数据库
+    :return:
+    """
     sql = os.path.join(cfg.CONF.website, "sql", "postgres.sql")
     if not os.path.exists(sql):
         raise ValueError("seahub sql file %s not exist")
