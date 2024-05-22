@@ -1,4 +1,3 @@
-# seafile 修复 seafutils-fsck
 import os
 from distutils.spawn import find_executable
 from oslo_config import cfg
@@ -11,6 +10,9 @@ FSCK = find_executable("seaf-fsck")
 def run():
     cfg.CONF.register_cli_opts(fsck_opts)
     cfg.CONF(project='seafile-fsck', description="seafile fsck tool")
+
+
+
 
     args = [
         FSCK,

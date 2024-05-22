@@ -36,12 +36,12 @@ dump_opts = [
                 help='target repos id list to dump'),
 ]
 
+
 launch_opts = [
     cfg.StrOpt('pidfile',
                required=True,
                help='Process pid file'),
 ]
-
 
 launch_seahub_opts = [
     cfg.BoolOpt('debug',

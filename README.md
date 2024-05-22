@@ -82,9 +82,9 @@ memcache        memcache地址,不配置表示不使用memcache缓存session
 
 ---
 
-## seafutils upgrade
+## seafutils reset
 
-### 更新配置
+### 重置管理员密码
 
 ---
 

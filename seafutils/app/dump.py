@@ -1,4 +1,3 @@
-# seafile 导出 seafutils-dump
 import os
 from distutils.spawn import find_executable
 from oslo_config import cfg

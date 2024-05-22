@@ -3,6 +3,7 @@ import os
 from oslo_config import cfg
 from distutils.spawn import find_executable
 
+from seafutils.utils import get_py2path
 from seafutils.config.cmd import launch_opts, launch_seahub_opts
 
 PYTHON = find_executable("python2")
@@ -28,7 +29,7 @@ def run():
         "SEAFILE_CONF_DIR": cfg.CONF.datadir,
         "SEAFILE_CENTRAL_CONF_DIR": cfg.CONF.central,
         "SEAHUB_LOG_DIR": cfg.CONF.logdir,
-        "PYTHONPATH": "%s:%s" % (cfg.CONF.website, third_part),
+        "PYTHONPATH": get_py2path(cfg.CONF.website, third_part),
     }
 
     if cfg.CONF.unix_socket:

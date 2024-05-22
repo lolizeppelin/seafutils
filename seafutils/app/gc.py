@@ -1,4 +1,3 @@
-# seafile 垃圾回收 seafutils-gc
 import os
 from distutils.spawn import find_executable
 from oslo_config import cfg
@@ -9,6 +8,10 @@ GC = find_executable("seafserv-gc")
 
 
 def run():
+    """
+    追加seahub的清理调用
+    :return:
+    """
     cfg.CONF.register_cli_opts(gc_opts)
     cfg.CONF(project='seafile-gc', description="seafile gc tool")
 

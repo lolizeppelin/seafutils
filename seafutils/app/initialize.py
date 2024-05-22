@@ -1,4 +1,3 @@
-# 初始化 seafutils-init
 import os
 import random
 import string

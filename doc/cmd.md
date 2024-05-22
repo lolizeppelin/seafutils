@@ -106,7 +106,7 @@ gunicorn ${DJANGO_WSGI_MODULE} --workers $NUM_WORKERS --log-level=debug
 
 ```
 
-### seahub过期清理
+### seahub
 
 ```text
 
@@ -117,5 +117,16 @@ gunicorn ${DJANGO_WSGI_MODULE} --workers $NUM_WORKERS --log-level=debug
     要清理文件活动表，登录到 MySQL/MariaDB，然后使用以下命令:
     use seahub_db;
     DELETE FROM Event WHERE to_days(now()) - to_days(timestamp) > 90;
+
+
+    export CCNET_CONF_DIR=${default_ccnet_conf_dir}
+    export SEAFILE_CONF_DIR=${seafile_data_dir}
+    export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
+    export PYTHONPATH=${INSTALLPATH}/seafile/lib/python2.6/site-packages:${INSTALLPATH}/seafile/lib64/python2.6/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
+    export PYTHONPATH=${INSTALLPATH}/seafile/lib/python2.7/site-packages:${INSTALLPATH}/seafile/lib64/python2.7/site-packages:$PYTHONPATH
+    
+    manage_py=${INSTALLPATH}/seahub/manage.py
+    exec "$PYTHON" "$manage_py" createsuperuser
+
 
 ```

@@ -19,7 +19,7 @@ BuildRequires:  python3-psycopg3 >= 3.1.0
 
 # base required
 Requires(pre):  shadow-utils
-Requires:       python >= 2.7.0
+Requires:       python2 >= 2.7.0
 Requires:       python3 >= 3.6
 Requires:       python-setuptools >= 40
 Requires:       python3-psycopg3 >= 3.0.0
@@ -44,7 +44,9 @@ rm -rf %{proj_name}.egg-info
 CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 %install
-%{__python2} setup.py install -O1 --skip-build --root %{buildroot}
+%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+# 配置文件生成
+%{__python} config-generator.py
 
 # systemd service file
 %{__install} -D -m 0644 -p seahub.service %{buildroot}%{_unitdir}/seahub.service
@@ -55,6 +57,8 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 # config path
 mkdir -p %{buildroot}%{_sysconfdir}/seafile
 mkdir -p %{buildroot}%{_sysconfdir}/seafile/central
+# config file
+%{__install} -D -m 0644 -p etc/seafile/seafile.conf %{buildroot}%{_sysconfdir}/seafile/seafile.conf
 
 # log files
 mkdir -p %{buildroot}/var/log/seafile
@@ -84,10 +88,13 @@ systemctl stop ccnet.service
 %{py_sitedir}/%{proj_name}-%{version}-*.egg-info/*
 %doc README.md
 %doc doc/*
+%doc etc/initialize.conf
 %defattr(-,seafile,seafile,-)
 %dir %{_sysconfdir}/seafile
 %dir %{_sysconfdir}/seafile/central
 %dir /var/log/seafile
+%defattr(-,root,root,-)
+%config(noreplace) %{_sysconfdir}/seafile/seafile.conf
 
 
 %changelog
