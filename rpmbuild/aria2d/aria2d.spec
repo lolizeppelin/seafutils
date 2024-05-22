@@ -10,6 +10,9 @@ Group:          Development/Libraries
 License:        MPLv1.1 or GPLv2
 URL:            http://github.com/Lolizeppelin/%{name}
 Source0:        AriaNg-%{version}.zip
+Source1:        aria2d.conf
+Source2:        aria2d.service
+Source3:        aria2d-nginx.conf
 BuildArch:      noarch
 
 Requires:       aria2 >= 1.7
@@ -20,18 +23,18 @@ Requires:       jellyfin >= 10.8
 Aria2 rpc daemon service, use AriaNg as web
 
 %prep
-%setup -q -n %{name}-%{version}
+cp %{SOURCE3} .
 
 
 %install
 mkdir -p %{buildroot}%{_sharedstatedir}/aria2d
 mkdir -p %{buildroot}%{_datarootdir}/aria2d
+
 %{__install} -D -m 0755 %{buildroot}%{_datarootdir}/aria2d/html
-cp * %{buildroot}%{_datarootdir}/aria2d/html/
+unzip -d %{buildroot}%{_datarootdir}/aria2d/html/  %{SOURCE0}
 
-
-%{__install} -D -m 0644 -p aria2d.service %{buildroot}%{_unitdir}/aria2d.service
-%{__install} -D -m 0640 -p etc/aria2d/aria2d.conf -t %{buildroot}%{_sysconfdir}/aria2d
+%{__install} -D -m 0640 -p %{SOURCE1} -t %{buildroot}%{_sysconfdir}/aria2d
+%{__install} -D -m 0644 -p %{SOURCE2} %{buildroot}%{_unitdir}/aria2d.service
 
 
 %preun
@@ -42,11 +45,10 @@ systemctl stop aria2d.service
 %defattr(-,root,root,-)
 %{_unitdir}/aria2d.service
 %{_datarootdir}/aria2d
-%doc README.md
-%doc etc/nginx/aria2d-nginx.conf
+%config(noreplace) %{_sysconfdir}/aria2d/aria2d.conf
+%doc aria2d-nginx.conf
 %defattr(-,jellyfin,jellyfin,-)
 %dir %{_sharedstatedir}/aria2d
-%config(noreplace) %{_sysconfdir}/aria2d/aria2d.conf
 
 
 %changelog
