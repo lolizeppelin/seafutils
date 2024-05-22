@@ -13,18 +13,18 @@ Source0:        %{proj_name}-%{version}.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python >= 3.6
-BuildRequires:  python-setuptools >= 40
-BuildRequires:  python-oslo-config >= 6.0.0
+BuildRequires:  python3-setuptools >= 40
+BuildRequires:  python3-oslo-config >= 6.0.0
 BuildRequires:  python3-psycopg3 >= 3.1.0
 
 # base required
 Requires(pre):  shadow-utils
 Requires:       python2 >= 2.7.0
 Requires:       python3 >= 3.6
-Requires:       python-setuptools >= 40
+Requires:       python3-setuptools >= 40
 Requires:       python3-psycopg3 >= 3.0.0
 Requires:       python3-stevedore >= 2.0.0
-Requires:       python-oslo-config >= 6.0.0
+Requires:       python3-oslo-config >= 6.0.0
 
 # seafile required
 Requires:       seahub >= 7.0.2
