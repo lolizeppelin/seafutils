@@ -91,8 +91,8 @@ sed -i -e /\(DESTDIR\)/d lib/lib%{name}.pc.in
 
 %build
 ./autogen.sh --enable-server --enable-client
+export PYTHON=python2
 %configure --disable-static  --with-postgresql=/usr/pgsql-11/bin/pg_config --disable-compile-demo
-
 %{__make} %{?_smp_mflags} CFLAGS="%{optflags}"
 
 
