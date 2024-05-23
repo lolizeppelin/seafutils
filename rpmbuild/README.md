@@ -55,5 +55,9 @@ rpmbuild -ba rpmbuild/SPECS/python2-simplejson.spec --without tests
 # root 安装编译好的simplejson
 rpmbuild -ba rpmbuild/SPECS/libsearpc.spec 
 # root 安装编译好的libsearpc
-
+rpmbuild -ba rpmbuild/SPECS/ccnet.spec 
+# root 安装编译好的ccnet  ccnet-devel
+rpmbuild -ba rpmbuild/SPECS/seafile.spec 
+# root 安装编译好的seafile-server
+rpmbuild -ba rpmbuild/SPECS/seafutils.spec 
 ```
