@@ -9,8 +9,8 @@ Release:        %{_release}%{?dist}
 Summary:        A simple and easy-to-use C language RPC framework
 
 License:        LGPLv3
-URL:            https://github.com/haiwen/%{name}
-Source0:        %{name}-server-%{version}-server.tar.gz
+URL:            https://github.com/haiwen/%{name}-server
+Source0:        %{name}-server-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -35,7 +35,6 @@ BuildRequires:  ccnet-devel = %{version}
 BuildRequires:  postgresql15-devel
 
 
-
 Requires:       libcurl >= 7.0
 Requires:       libevent >= 2.0
 Requires:       jansson
@@ -46,11 +45,7 @@ Requires:       glib2 >= 2.5
 
 Requires:       ccnet = %{version}
 Requires:       libsearpc >= 3.1
-
-
-Requires:       postgresql15-libs
-
-
+Requires:       postgresql-libs
 
 
 %description
@@ -102,6 +97,11 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 # default seafile data dir
 %{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
 
+# shebangs 修正
+sed -i '1c\#!/usr/bin/python2' %{buildroot}%{_bindir}/%{name}-admin
+
+
+
 %check
 # tests are failing on big endian arches
 # https://bugzilla.redhat.com/show_bug.cgi?id=1388453
@@ -140,7 +140,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 - Update 7.0.2 For fedora 40
 
 
-* Sun Mar 26 2019 Lolizeppelin <lolizeppelin@gmail.com> - 7.0.0
+* Tue Mar 26 2019 Lolizeppelin <lolizeppelin@gmail.com> - 7.0.0
 - Update to 7.0.0
 
 

@@ -18,6 +18,8 @@ Source2:        seahub.postgres.sql
 Requires:       python2 >= 2.7
 Requires:       libsearpc >= 3.1
 Requires:       python2-psycopg2 >= 2.0
+# 禁止自动依赖生成
+AutoReqProv:    no
 
 
 %description
@@ -81,9 +83,6 @@ fi
 %{_datadir}/%{name}
 %defattr(-,seafile,seafile,-)
 %{_sharedstatedir}/%{name}
-%{_sharedstatedir}/%{name}/thumb
-%{_sharedstatedir}/%{name}/avatars/*
-
 
 %changelog
 * Wed May 22 2024 Lolizeppelin <lolizeppelin@gmail.com> - 7.0.2

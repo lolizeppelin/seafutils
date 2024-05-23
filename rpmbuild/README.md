@@ -32,7 +32,7 @@ dnf install gcc gcc-c++ cmake rpm-build automake autoconf
 # seafile 依赖
 dnf install libevent-devel libarchive-devel fuse-devel libcurl-devel libzdb-devel 
 dnf install openssl-devel libuuid-devel sqlite-devel glib2-devel jansson-devel postgresql15-devel
-dnf install vala libtool
+dnf install vala libtool intltool
 
 ```
 

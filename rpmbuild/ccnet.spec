@@ -7,8 +7,8 @@ Release:        %{_release}%{?dist}
 Summary:        A simple and easy-to-use C language RPC framework
 
 License:        LGPLv3
-URL:            https://github.com/haiwen/%{name}
-Source0:        %{name}-server-%{version}-server.tar.gz
+URL:            https://github.com/haiwen/%{name}-server
+Source0:        %{name}-server-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -44,7 +44,7 @@ Requires:       libarchive
 
 
 Requires:       libsearpc >= 3.1
-Requires:       postgresql15-libs
+Requires:       postgresql-libs
 
 
 %description
@@ -115,7 +115,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 * Wed May 22 2024 Lolizeppelin <lolizeppelin@gmail.com> - 7.0.2
 - Update 7.0.2 For fedora 40
 
-* Sun Mar 26 2019 Lolizeppelin <lolizeppelin@gmail.com> - 7.0.0
+* Tue Mar 26 2019 Lolizeppelin <lolizeppelin@gmail.com> - 7.0.0
 - Update to 7.0.0
 
 * Fri Mar 15 2019 Lolizeppelin <lolizeppelin@gmail.com> - 6.3.4
