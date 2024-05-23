@@ -27,9 +27,9 @@ Requires:       python3-stevedore >= 2.0.0
 Requires:       python3-oslo-config >= 6.0.0
 
 # seafile required
-Requires:       seahub >= 7.0.2
-Requires:       seafile-server >= 7.0.2
-Requires:       seafile-ccnet >= 7.0.2
+Requires:       seahub = 7.0.2
+Requires:       seafile-server = 7.0.2
+Requires:       seafile-ccnet = 7.0.2
 
 
 
@@ -55,13 +55,13 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 
 # config path
-mkdir -p %{buildroot}%{_sysconfdir}/seafile
-mkdir -p %{buildroot}%{_sysconfdir}/seafile/central
+%{__mkdir} -p %{buildroot}%{_sysconfdir}/seafile
+%{__mkdir} -p %{buildroot}%{_sysconfdir}/seafile/central
 # config file
 %{__install} -D -m 0644 -p etc/seafile/seafile.conf %{buildroot}%{_sysconfdir}/seafile/seafile.conf
 
 # log files
-mkdir -p %{buildroot}/var/log/seafile
+%{__mkdir} -p %{buildroot}/var/log/seafile
 
 # bin files
 for l in bin/*;do

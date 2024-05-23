@@ -27,12 +27,11 @@ cp %{SOURCE3} .
 
 
 %install
-mkdir -p %{buildroot}%{_sharedstatedir}/aria2d
-mkdir -p %{buildroot}%{_datarootdir}/aria2d
+%{__mkdir}  -p %{buildroot}%{_sharedstatedir}/aria2d
+%{__mkdir}  -p %{buildroot}%{_datarootdir}/aria2d
+%{__mkdir} -p %{buildroot}%{_datarootdir}/aria2d/html
 
-%{__install} -D -m 0755 %{buildroot}%{_datarootdir}/aria2d/html
 unzip -d %{buildroot}%{_datarootdir}/aria2d/html/  %{SOURCE0}
-
 %{__install} -D -m 0640 -p %{SOURCE1} -t %{buildroot}%{_sysconfdir}/aria2d
 %{__install} -D -m 0644 -p %{SOURCE2} %{buildroot}%{_unitdir}/aria2d.service
 

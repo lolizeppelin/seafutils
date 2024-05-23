@@ -100,7 +100,7 @@ sed -i -e /\(DESTDIR\)/d lib/lib%{name}.pc.in
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 # default seafile data dir
-mkdir -p %{buildroot}%{_sharedstatedir}/%{name}
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
 
 %check
 # tests are failing on big endian arches

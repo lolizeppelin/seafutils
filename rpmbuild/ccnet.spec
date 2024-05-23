@@ -80,8 +80,8 @@ sed -i -e /\(DESTDIR\)/d lib%{name}.pc.in
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 # default ccnet data dir
-mkdir -p %{buildroot}%{_sharedstatedir}/%{name}
-mkdir -p %{buildroot}%{_sharedstatedir}/%{name}/config
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}/config
 
 
 %check
