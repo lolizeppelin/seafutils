@@ -32,7 +32,7 @@ advanced support for file syncing, privacy protection and teamwork.
 %build
 
 %install
-%{__mkdir} -p 0755 %{buildroot}%{_datadir}
+%{__mkdir} -p %{buildroot}%{_datadir}
 %{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
 
 # 拷贝程序文件

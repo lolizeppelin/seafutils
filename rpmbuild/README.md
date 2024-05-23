@@ -8,7 +8,7 @@ dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$
 # 不要装ffmpeg-free
 dnf install ffmpeg
 # openstack 基础库
-dnf install python-oslo-config python-stevedore python-pbr
+dnf install python-oslo-config python-stevedore python-pbr python3-psycopg3
 # python2
 dnf install python2
 # 数据库

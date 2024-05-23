@@ -1,25 +1,23 @@
 %global debug_package %{nil}
-%define proj_name seafutils
 %define _release 1
 
-Name:           %{proj_name}
+Name:           seafutils
 Version:        2.0.0
 Release:        %{_release}%{?dist}
 Summary:        manager utils for seafile server
 Group:          Development/Libraries
 License:        MIT
-URL:            http://github.com/Lolizeppelin/%{proj_name}
-Source0:        %{proj_name}-%{version}.tar.gz
+URL:            http://github.com/Lolizeppelin/%{name}
+Source0:        %{name}-%{version}.tar.gz
 BuildArch:      noarch
 
-BuildRequires:  python >= 3.6
+BuildRequires:  python3 >= 3.6
 BuildRequires:  python3-setuptools >= 40
 BuildRequires:  python3-oslo-config >= 6.0.0
 BuildRequires:  python3-psycopg3 >= 3.1.0
 
 # base required
 Requires(pre):  shadow-utils
-Requires:       python2 >= 2.7.0
 Requires:       python3 >= 3.6
 Requires:       python3-setuptools >= 40
 Requires:       python3-psycopg3 >= 3.0.0
@@ -37,20 +35,22 @@ Requires:       seafile-ccnet = 7.0.2
 utils for seafile server
 
 %prep
-%setup -q -n %{proj_name}-%{version}
-rm -rf %{proj_name}.egg-info
+%setup -q -n %{name}-%{version}
+rm -rf %{name}.egg-info
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
+sed -i '0,/VERSION/s//%{version}/' setup.cfg
+sed -i '0,/VERSION/s//%{version}/' PKG-INFO
+CFLAGS="$RPM_OPT_FLAGS" %{__python3} setup.py build
 
 %install
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
 # 配置文件生成
-%{__python} config-generator.py
+%{__python3} config-generator.py
 
 # systemd service file
 %{__install} -D -m 0644 -p seahub.service %{buildroot}%{_unitdir}/seahub.service
-%{__install} -D -m 0644 -p ccnet.service %{buildroot}%{_unitdir}/ccnet.service
+%{__install} -D -m 0644 -p seafile.service %{buildroot}%{_unitdir}/seafile.service
 %{__install} -D -m 0644 -p ccnet.service %{buildroot}%{_unitdir}/ccnet.service
 
 
@@ -83,9 +83,9 @@ systemctl stop ccnet.service
 %{_unitdir}/seafile.service
 %{_unitdir}/ccnet.service
 %{_unitdir}/seahub.service
-%{py_sitedir}/%{proj_name}/*
-%dir %{py_sitedir}/%{proj_name}-%{version}-*.egg-info/
-%{py_sitedir}/%{proj_name}-%{version}-*.egg-info/*
+%{python3_sitelib}/%{name}/*
+%dir %{python3_sitelib}/%{name}-%{version}-py3.*.egg-info/
+%{python3_sitelib}/%{name}-%{version}-py3.*.egg-info/*
 %doc README.md
 %doc doc/*
 %doc etc/initialize.conf
