@@ -8,12 +8,14 @@ License:        LGPLv3
 URL:            https://github.com/haiwen/%{name}
 Source0:        %{name}-3.1-latest.tar.gz
 
+Requires:       python2 >= 2.7
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
 BuildRequires:  glib2-devel
 BuildRequires:  jansson-devel
 BuildRequires:  pygobject2
+BuildRequires:  python2 >= 2.7
 BuildRequires:  python2-simplejson
 
 
@@ -45,6 +47,7 @@ sed -i '1c\#!/usr/bin/python2' lib/searpc-codegen.py
 
 %build
 ./autogen.sh
+export PYTHON=python2
 %configure --disable-static --disable-compile-demo
 %{__make} %{?_smp_mflags} CFLAGS="%{optflags}"
 
@@ -101,6 +104,7 @@ fi
 * Wed May 22 2024 Lolizeppelin <lolizeppelin@gmail.com> - 3.1-11
 - Update for fedora 40
 - Add seafile user
+- Force to python2
 
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.1-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild

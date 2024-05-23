@@ -39,18 +39,21 @@ dnf install vala libtool
 ### 编译依赖
 
 ```shell
+# su - builder 切换编译用户
+cd ~
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive06/packages/python2-setuptools/41.2.0/4.fc34/src/python2-setuptools-41.2.0-4.fc34.src.rpm
 rpm -ivh python2-setuptools-41.2.0-4.fc34.src.rpm
 rpmbuild -ba rpmbuild/python2-setuptools.spec
-
+# root 安装编译好的setuptools
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive06/packages/python-psycopg2/2.8.6/5.fc35/src/python-psycopg2-2.8.6-5.fc35.src.rpm
 rpm -ivh python-psycopg2-2.8.6-5.fc35.src.rpm
 # 将 BuildRequires: pkgconfig(libpq) 更改为 BuildRequires:  /usr/bin/pg_config
-sed -i '0,/BuildRequires: pkgconfig(libpq)/s##BuildRequires: /usr/bin/pg_config#' rpmbuild/SPECS/python-psycopg2.spec
+sed -i '0,/BuildRequires:.*pkgconfig(libpq)/s##BuildRequires:  /usr/bin/pg_config#' rpmbuild/SPECS/python-psycopg2.spec
 rpmbuild -ba rpmbuild/SPECS/python-psycopg2.spec --without python3 --with python2 --without python3_debug --without tests
-
-rpmbuild -ba python2-simplejson --without tests
-
-rpmbuild -ba libsearpc.spec 
+# root 安装编译好的psycopg2
+rpmbuild -ba rpmbuild/SPECS/python2-simplejson.spec --without tests
+# root 安装编译好的simplejson
+rpmbuild -ba rpmbuild/SPECS/libsearpc.spec 
+# root 安装编译好的libsearpc
 
 ```
