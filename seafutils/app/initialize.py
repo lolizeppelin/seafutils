@@ -1,4 +1,5 @@
 import os
+import shutil
 import stat
 import random
 import string
@@ -23,7 +24,7 @@ def password(length):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
-def verify(path):
+def verify(path, empty=True):
     try:
         st = os.stat(path)
     except OSError:
@@ -34,8 +35,9 @@ def verify(path):
         raise ValueError("path %s can not be write or enter" % path)
     if getuser(st.st_uid) != 'seafile':
         raise ValueError("path %s owner is not seafile" % path)
-    for _ in os.scandir(path):
-        raise ValueError("path %s is not empty" % path)
+    if empty:
+        for _ in os.scandir(path):
+            raise ValueError("path %s is not empty" % path)
 
 
 @contextlib.contextmanager
@@ -52,12 +54,13 @@ def connect(**kwargs):
 
 @contextlib.contextmanager
 def create_database(conf):
-    admin = cfg.CONF.admin or conf.user
-    admin_passwd = cfg.CONF.admin_passwd or conf.passwd
+    admin = conf.admin or cfg.CONF.admin
+    admin_passwd = conf.admin_passwd or cfg.CONF.admin_passwd
     with connect(host=conf.host, port=conf.port, user=admin, password=admin_passwd,
                  dbname='postgres') as conn:
         conn.autocommit = True
-        conn.execute("""CREATE DATABASE %s ENCODING 'UTF8' LC_COLLATE = 'zh_CN.UTF-8' LC_CTYPE = 'zh_CN.UTF-8'""")
+        conn.execute("""CREATE DATABASE %s ENCODING 'UTF8' 
+        LC_COLLATE = 'zh_CN.UTF-8' LC_CTYPE = 'zh_CN.UTF-8'""" % conf.db)
         conn.autocommit = False
 
         cursor = conn.cursor()
@@ -73,6 +76,7 @@ def create_database(conf):
                      dbname='postgres') as conn:
             cursor = conn.cursor()
             with conn.transaction("drop"):
+                cursor.execute('ALTER DATABASE "%s" OWNER TO "%s"' % (conf.db, admin))
                 cursor.execute('DROP OWNED by "%s" CASCADE' % conf.user)
                 cursor.execute('DROP ROLE IF EXISTS "%s"' % conf.user)
 
@@ -112,9 +116,9 @@ def init_seafile():
         ]
 
         with create_database(cfg.CONF.seafile):
-            with cfile(os.path.join(cfg.CONF.config, 'seafile.ini')) as fi:
-                fi.write(cfg.CONF.datadir)
-                fi.flush()
+            with cfile(os.path.join(cfg.CONF.config, 'seafile.ini')) as f2:
+                f2.write(cfg.CONF.datadir)
+                f2.flush()
                 sub = subprocess.Popen(args, executable=SEAFILE, shell=False)
                 if sub.wait() != 0:
                     raise ValueError("seafile initialize failed")
@@ -127,7 +131,7 @@ def init_ccnet():
     创建ccnet配置文件与数据库,调用ccnet初始化命令
     :return:
     """
-    with cfile(os.path.join(cfg.CONF.central, 'seafile.conf')) as f:
+    with cfile(os.path.join(cfg.CONF.central, 'ccnet.conf')) as f:
         config = templates.ccnet()
         config.write(f)
         f.flush()
@@ -162,11 +166,11 @@ def init_seahub():
         with create_database(cfg.CONF.seahub):
             args = [
                 PSQL,
+                '-w', '-q',
                 '-U', conf.user,
                 '-h', conf.host,
                 '-p', str(conf.port),
                 '-f', sql,
-                '-w',
                 conf.db,
             ]
             sub = subprocess.Popen(args, executable=PSQL, shell=False, env=dict(PGPASSWORD=conf.passwd))
@@ -188,13 +192,26 @@ def init():
     cfg.CONF(project='seafile-init', description="seafile initialize")
 
     verify(cfg.CONF.central)
-    verify(cfg.CONF.config)
-    verify(cfg.CONF.datadir)
+    verify(os.path.dirname(cfg.CONF.config), False)
+    verify(os.path.dirname(cfg.CONF.datadir), False)
+
+    # issuer ccnet and seafile data path not exists
+    if os.path.exists(cfg.CONF.config):
+        raise ValueError("ccnet %s config exist" % cfg.CONF.config)
+    if os.path.exists(cfg.CONF.datadir):
+        raise ValueError("seafile %s datadir exist" % cfg.CONF.datadir)
 
     # ------------ seafile ------------
-    with init_seafile():
+    try:
         with init_ccnet():
-            init_seahub()
+            with init_seafile():
+                init_seahub()
+    except Exception:
+        if os.path.exists(cfg.CONF.config):
+            shutil.rmtree(cfg.CONF.config)
+        if os.path.exists(cfg.CONF.datadir):
+            shutil.rmtree(cfg.CONF.datadir)
+        raise
 
 
 def relocate():
@@ -202,10 +219,10 @@ def relocate():
     initialized()
     if not os.path.exists(cfg.CONF.datadir) or not os.path.isdir(cfg.CONF.datadir):
         raise ValueError("%s is not exist or not directory" % cfg.CONF.datadir)
-    cfile = os.path.join(cfg.CONF.config, "seafile.ini")
-    if not os.path.exists(cfile) or not os.path.isfile(cfile):
+    ini = os.path.join(cfg.CONF.config, "seafile.ini")
+    if not os.path.exists(ini) or not os.path.isfile(ini):
         raise ValueError("%s not exist or not file" % cfile)
-    with open(cfile, "w") as f:
+    with open(ini, "w") as f:
         f.write(cfg.CONF.datadir)
 
 

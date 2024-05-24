@@ -82,7 +82,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 # default ccnet data dir
 %{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}/config
 
 
 %check
@@ -101,7 +100,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_bindir}/%{name}-init
 %{_bindir}/%{name}-server
 %dir %attr(0755,seafile,seafile) %{_sharedstatedir}/%{name}
-%dir %attr(0750,seafile,seafile) %{_sharedstatedir}/%{name}/config
 
 
 %files devel

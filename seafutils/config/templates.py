@@ -87,7 +87,7 @@ def seahub():
     """
     conf = cfg.CONF.seahub
     content = TEMPLATE % dict(key=conf.secret,
-                              name=conf.name,
+                              name=conf.db,
                               username=conf.user,
                               password=conf.passwd,
                               host=conf.host,

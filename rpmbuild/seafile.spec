@@ -95,7 +95,7 @@ export PYTHON=python2
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 # default seafile data dir
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}/data
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
 
 # shebangs 修正
 sed -i '1c\#!/usr/bin/python2' %{buildroot}%{_bindir}/%{name}-admin
