@@ -12,7 +12,7 @@ base_opts = [
                default='/var/lib/seafile/data',
                help='Seafile server data path'),
     cfg.StrOpt('website',
-               default='/usr/share/seahub/wsgi',
+               default='/usr/share/seahub',
                help='seahub wsgi root path'),
     cfg.StrOpt('logdir',
                default='/var/log/seafile',

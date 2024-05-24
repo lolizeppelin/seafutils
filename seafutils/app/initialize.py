@@ -13,7 +13,7 @@ from seafutils.config.initialize import init_opts, ccnet_init_opts, seahub_init_
 
 CCNET = find_executable("ccnet-init")
 SEAFILE = find_executable("seaf-server-init")
-PSQL = find_executable("psql ")
+PSQL = find_executable("psql")
 
 
 def password(length):

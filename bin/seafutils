@@ -5,9 +5,19 @@ import seafutils
 
 def main():
     if len(sys.argv) < 2:
-        print("no parameters found", file=sys.stderr)
+        print("-h or --help for more parameters", file=sys.stderr)
         sys.exit(1)
     app = sys.argv[1]
+    if app in ('--help', '-h'):
+        print("usage: seafutils [app] -h for more options")
+        print("app:")
+        print("  clean\tclean session")
+        print("  dump\texport files to directory")
+        print("  fsck\tfsck fix")
+        print("  gc\tgarbage collection")
+        print("  init\tinitialize seafile")
+        print("  reset\treset admin")
+        sys.exit(0)
     sys.argv[1] = '--config-file=/etc/seafile/seafile.conf'
     seafutils.execute(app)
 

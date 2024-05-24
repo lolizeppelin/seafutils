@@ -122,9 +122,9 @@ gunicorn ${DJANGO_WSGI_MODULE} --workers $NUM_WORKERS --log-level=debug
     export CCNET_CONF_DIR=${default_ccnet_conf_dir}
     export SEAFILE_CONF_DIR=${seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
-    export PYTHONPATH=${INSTALLPATH}/seafile/lib/python2.6/site-packages:${INSTALLPATH}/seafile/lib64/python2.6/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
+    export PYTHONPATH=${INSTALLPATH}/seafile/lib/python2.6/site-packages:${INSTALLPATH}/seafile/lib64/python2.6/site-packages:${INSTALLPATH}/seahub:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
     export PYTHONPATH=${INSTALLPATH}/seafile/lib/python2.7/site-packages:${INSTALLPATH}/seafile/lib64/python2.7/site-packages:$PYTHONPATH
-    
+
     manage_py=${INSTALLPATH}/seahub/manage.py
     exec "$PYTHON" "$manage_py" createsuperuser
 
