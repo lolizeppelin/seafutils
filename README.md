@@ -1,5 +1,9 @@
 # Seafile 服务端工具
 
+#### 必须使用seafile用户或者root执行
+
+#### root执行时会自动切换为seafile用户,不可读取root权限文件
+
 --- 
 
 ## seafutils init
@@ -64,6 +68,12 @@ memcache        memcache地址,不配置表示不使用memcache缓存session
 
 ---
 
+## seafutils relocate
+
+### seafile数据文件夹修改重定向
+
+---
+
 ## seafutils gc
 
 ### 垃圾回收
@@ -88,7 +98,33 @@ memcache        memcache地址,不配置表示不使用memcache缓存session
 
 ---
 
-# 服务启动与关闭
+## seafutils clean
+
+### seahub清理session
+
+---
+
+# memcached配置
+
+```ini
+# systemctl edit memcached.service
+[Service]
+RuntimeDirectoryMode=0777
+RuntimeDirectoryPreserve=no
+RuntimeDirectory=memcached
+```
+
+```shell
+# vim /etc/sysconfig/memcached 
+PORT="11211"
+USER="memcached"
+MAXCONN="1024"
+CACHESIZE="128"
+#OPTIONS="-l 127.0.0.1,::1"
+OPTIONS="-l 127.0.0.1 -s /run/memcached/memcached.sock -a 0666"
+```
+
+# seafile启动与关闭
 
 ```shell
 

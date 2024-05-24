@@ -2,6 +2,8 @@ import os
 import stat
 import random
 import string
+import uuid
+
 import psycopg
 import contextlib
 import subprocess
@@ -29,7 +31,7 @@ def verify(path):
     if not stat.S_ISDIR(st.st_mode):
         raise ValueError("path %s not directory" % path)
     if not os.access(path, os.R_OK | os.W_OK | os.X_OK):
-        raise ValueError("path %s can not be write or enter")
+        raise ValueError("path %s can not be write or enter" % path)
     if getuser(st.st_uid) != 'seafile':
         raise ValueError("path %s owner is not seafile" % path)
     for _ in os.scandir(path):
@@ -38,7 +40,10 @@ def verify(path):
 
 @contextlib.contextmanager
 def connect(**kwargs):
-    c = psycopg.connect(connect_timeout=3, **kwargs)
+    try:
+        c = psycopg.connect(connect_timeout=3, **kwargs)
+    except Exception as e:
+        raise ValueError("psycopg connect failed: %s" % str(e))
     try:
         yield c
     finally:
@@ -49,8 +54,6 @@ def connect(**kwargs):
 def create_database(conf):
     admin = cfg.CONF.admin or conf.user
     admin_passwd = cfg.CONF.admin_passwd or conf.passwd
-    if not admin_passwd:
-        raise ValueError("admin password not found")
     with connect(host=conf.host, port=conf.port, user=admin, password=admin_passwd,
                  dbname='postgres') as conn:
         conn.autocommit = True
@@ -82,14 +85,12 @@ def create_database(conf):
 def cfile(path):
     if os.path.exists(path):
         raise ValueError('path %s already exist' % path)
-    failed = False
     with open(path, 'w') as f:
         try:
             yield f
         except Exception:
-            failed = True
-    if failed:
-        os.remove(path)
+            os.remove(path)
+            raise
 
 
 @contextlib.contextmanager
@@ -174,10 +175,11 @@ def init_seahub():
 
 
 def init():
-    # 默认密码使用随机密码
+    # 数据库默认密码使用随机密码
     cfg.set_defaults(ccnet_init_opts, passwd=password(10))
-    cfg.set_defaults(seahub_init_opts, passwd=password(10))
     cfg.set_defaults(seafile_init_opts, passwd=password(10))
+    # secret使用uuid4随机数
+    cfg.set_defaults(seahub_init_opts, passwd=password(10), secret=uuid.uuid4().hex[:20])
 
     cfg.CONF.register_cli_opts(init_opts)
     cfg.CONF.register_cli_opts(ccnet_init_opts, 'ccnet')

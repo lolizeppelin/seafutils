@@ -8,6 +8,7 @@ init_opts = [
                default='postgres',
                help='Database(global) admin user name'),
     cfg.StrOpt('admin_passwd', short='p',
+               default="",
                secret=True,
                help='Database(global) admin user password'),
 ]
@@ -44,7 +45,7 @@ seafile_init_opts = copy.deepcopy(database_opts) + [
 
 seahub_init_opts = copy.deepcopy(database_opts) + [
     cfg.StrOpt('secret',
-               required=True,
+               secret=True,
                max_length=20,
                help='secret key'),
     cfg.StrOpt('memcache',
