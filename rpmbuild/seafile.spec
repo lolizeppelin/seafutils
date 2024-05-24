@@ -95,7 +95,7 @@ export PYTHON=python2
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 # default seafile data dir
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}/data
 
 # shebangs 修正
 sed -i '1c\#!/usr/bin/python2' %{buildroot}%{_bindir}/%{name}-admin
@@ -127,8 +127,9 @@ sed -i '1c\#!/usr/bin/python2' %{buildroot}%{_bindir}/%{name}-admin
 %{_bindir}/%{_exe_prefix}-server-init
 %{_bindir}/%{_exe_prefix}serv-gc
 %{python2_sitearch}/seaserv
-%defattr(-,seafile,seafile,-)
+%defattr(0750,seafile,seafile,-)
 %dir %{_sharedstatedir}/%{name}
+
 
 %files devel
 %{_libdir}/pkgconfig/lib%{name}.pc

@@ -27,7 +27,7 @@ Requires:       python3-oslo-config >= 6.0.0
 # seafile required
 Requires:       seahub = 7.0.2
 Requires:       seafile-server = 7.0.2
-Requires:       seafile-ccnet = 7.0.2
+Requires:       ccnet = 7.0.2
 
 
 

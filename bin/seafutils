@@ -4,6 +4,9 @@ import seafutils
 
 
 def main():
+    if len(sys.argv) < 2:
+        print("no parameters found", file=sys.stderr)
+        sys.exit(1)
     app = sys.argv[1]
     sys.argv[1] = '--config-file=/etc/seafile/seafile.conf'
     seafutils.execute(app)
