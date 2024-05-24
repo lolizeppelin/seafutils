@@ -13,13 +13,13 @@ admin         初始化时全局数据库管理员账户(默认postgres)
 admin_passwd  初始化时全局数据库管理员密码
 ```
 
-- #### ccent
+- #### ccnet
 
 ```text
-db              数据库名(默认ccent)
+db              数据库名(默认ccnet)
 host            数据库host(默认127.0.0.1)
 port            数据库端口(默认5432)
-user            用户名(默认ccent)
+user            用户名(默认ccnet)
 passwd          密码(默认生成随机密码)
 admin           数据库管理员账户(默认使用全局数据库管理员账户)
 admin_passwd    数据库管理员密码(默认使用全局数据库管理员密码)

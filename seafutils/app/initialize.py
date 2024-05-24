@@ -135,8 +135,8 @@ def init_ccnet():
             CCNET,
             '-F', cfg.CONF.central,
             '--config-dir', cfg.CONF.config,
-            '--name', cfg.CONF.ccent.name,
-            '--host', cfg.CONF.ccent.domain,
+            '--name', cfg.CONF.ccnet.name,
+            '--host', cfg.CONF.ccnet.domain,
         ]
 
         with create_database(cfg.CONF.ccnet):

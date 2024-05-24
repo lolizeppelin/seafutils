@@ -15,7 +15,7 @@ init_opts = [
 ccnet_init_opts = copy.deepcopy(database_opts) + [
     cfg.PortOpt('listen',
                 default=10001,
-                help='ccent server internal port'),
+                help='ccnet server internal port'),
     cfg.StrOpt('name',
                required=True,
                regex=r'^[a-zA-Z0-9_\-]{3,15}$',
