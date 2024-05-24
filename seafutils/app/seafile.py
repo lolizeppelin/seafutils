@@ -5,6 +5,7 @@ from oslo_config import cfg
 from seafutils.config.cmd import fsck_opts
 from seafutils.config.cmd import dump_opts
 from seafutils.config.cmd import gc_opts
+from .initialize import initialized
 
 FSCK = find_executable("seaf-fsck")
 GC = find_executable("seafserv-gc")
@@ -13,6 +14,7 @@ GC = find_executable("seafserv-gc")
 def fsck():
     cfg.CONF.register_cli_opts(fsck_opts)
     cfg.CONF(project='seafile-fsck', description="seafile fsck tool")
+    initialized()
 
     args = [
         FSCK,
@@ -32,6 +34,7 @@ def fsck():
 def dump():
     cfg.CONF.register_cli_opts(dump_opts)
     cfg.CONF(project='seafile-dump', description="seafile dump tool")
+    initialized()
 
     args = [
         FSCK,
@@ -54,6 +57,7 @@ def gc():
     """
     cfg.CONF.register_cli_opts(gc_opts)
     cfg.CONF(project='seafile-gc', description="seafile gc tool")
+    initialized()
 
     args = [
         GC,

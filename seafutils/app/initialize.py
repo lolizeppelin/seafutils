@@ -1,4 +1,5 @@
 import os
+import stat
 import random
 import string
 import psycopg
@@ -23,10 +24,16 @@ def password(length):
 def verify(path):
     if not os.path.exists(path):
         raise ValueError("path %s not exist" % path)
-    if not os.path.isdir(path):
+    try:
+        st = os.stat(path)
+    except OSError:
+        raise ValueError("path %s not exist or not readable" % path)
+    if not stat.S_ISDIR(st.st_mode):
         raise ValueError("path %s not directory" % path)
-    if getuser(os.stat(path).st_uid).pw_name != 'seafile':
-        raise ValueError("path %s owner not seafile" % path)
+    if not os.access(path, os.R_OK | os.W_OK | os.X_OK):
+        raise ValueError("path %s can not be write or enter")
+    if getuser(st.st_uid).pw_name != 'seafile':
+        raise ValueError("path %s owner is not seafile" % path)
     for _ in os.scandir(path):
         raise ValueError("path %s is not empty" % path)
 
@@ -168,7 +175,7 @@ def init_seahub():
                 raise ValueError("seahub load sql failed")
 
 
-def run():
+def init():
     # 默认密码使用随机密码
     cfg.set_defaults(ccnet_init_opts, passwd=password(10))
     cfg.set_defaults(seahub_init_opts, passwd=password(10))
@@ -178,7 +185,7 @@ def run():
     cfg.CONF.register_cli_opts(ccnet_init_opts, 'ccnet')
     cfg.CONF.register_cli_opts(seahub_init_opts, 'seahub')
     cfg.CONF.register_cli_opts(seafile_init_opts, 'seafile')
-    cfg.CONF(project='seafile-init', description="seafile init")
+    cfg.CONF(project='seafile-init', description="seafile initialize")
 
     verify(cfg.CONF.central)
     verify(cfg.CONF.config)
@@ -188,3 +195,34 @@ def run():
     with init_seafile():
         with init_ccnet():
             init_seahub()
+
+
+def relocate():
+    cfg.CONF(project='seafile-relocate', description="seafile relocate data dir")
+    initialized()
+    if not os.path.exists(cfg.CONF.datadir) or not os.path.isdir(cfg.CONF.datadir):
+        raise ValueError("%s is not exist or not directory" % cfg.CONF.datadir)
+    cfile = os.path.join(cfg.CONF.config, "seafile.ini")
+    if not os.path.exists(cfile) or not os.path.isfile(cfile):
+        raise ValueError("%s not exist or not file" % cfile)
+    with open(cfile, "w") as f:
+        f.write(cfg.CONF.datadir)
+
+
+def initialized():
+    """issuer seafile initialized"""
+    for conf in (
+            os.path.join(cfg.CONF.central, 'ccnet.conf'),
+            os.path.join(cfg.CONF.central, 'seafile.conf'),
+            os.path.join(cfg.CONF.central, 'seahub_settings.py'),
+    ):
+        try:
+            st = os.stat(conf)
+            if not stat.S_ISREG(st.st_mode):
+                raise ValueError("config %s is not file" % conf)
+            if getuser(st.st_uid).pw_name != 'seafile':
+                raise ValueError("config %s owner not seafile" % conf)
+            if not os.access(conf, os.R_OK):
+                raise ValueError("config %s not readable" % conf)
+        except OSError:
+            raise ValueError("seafile not initialized or config path error")

@@ -3,12 +3,15 @@ from distutils.spawn import find_executable
 
 from oslo_config import cfg
 from seafutils.utils import get_py2path
+from .initialize import initialized
+
 
 PYTHON = find_executable("python2")
 
 
 def run(project, method):
     cfg.CONF(project=project)
+    initialized()
     third_part = os.path.join(cfg.CONF.website, 'thirdpart')
     env = {
         "CCNET_CONF_DIR": cfg.CONF.config,

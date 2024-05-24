@@ -26,10 +26,9 @@ fsck_opts = [
 ]
 
 dump_opts = [
-    cfg.BoolOpt('export',
-                required=True,
-                default=False,
-                help='export files to directory'),
+    cfg.StrOpt('export',
+               required=True,
+               help='export files to directory'),
     cfg.ListOpt('repos',
                 short='r',
                 item_type=types.Integer(),

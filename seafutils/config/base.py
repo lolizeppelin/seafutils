@@ -10,7 +10,7 @@ base_opts = [
                help='ccent config path'),
     cfg.StrOpt('datadir',
                default='/var/lib/seafile/data',
-               help='Seafile server data path'),
+               help='Seafile server data path, required "seafutils relocate" after changed'),
     cfg.StrOpt('website',
                default='/usr/share/seahub',
                help='seahub wsgi root path'),
