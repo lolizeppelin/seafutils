@@ -30,7 +30,7 @@ def verify(path):
         raise ValueError("path %s not directory" % path)
     if not os.access(path, os.R_OK | os.W_OK | os.X_OK):
         raise ValueError("path %s can not be write or enter")
-    if getuser(st.st_uid).pw_name != 'seafile':
+    if getuser(st.st_uid) != 'seafile':
         raise ValueError("path %s owner is not seafile" % path)
     for _ in os.scandir(path):
         raise ValueError("path %s is not empty" % path)
@@ -136,7 +136,7 @@ def init_ccnet():
             '-F', cfg.CONF.central,
             '--config-dir', cfg.CONF.config,
             '--name', cfg.CONF.ccent.name,
-            '--host', cfg.CONF.ccent.host,
+            '--host', cfg.CONF.ccent.domain,
         ]
 
         with create_database(cfg.CONF.ccnet):
@@ -218,7 +218,7 @@ def initialized():
             st = os.stat(conf)
             if not stat.S_ISREG(st.st_mode):
                 raise ValueError("config %s is not file" % conf)
-            if getuser(st.st_uid).pw_name != 'seafile':
+            if getuser(st.st_uid) != 'seafile':
                 raise ValueError("config %s owner not seafile" % conf)
             if not os.access(conf, os.R_OK):
                 raise ValueError("config %s not readable" % conf)

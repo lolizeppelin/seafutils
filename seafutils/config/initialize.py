@@ -6,10 +6,10 @@ from .base import database_opts
 init_opts = [
     cfg.StrOpt('admin',
                default='postgres',
-               help='Database admin user name'),
+               help='Database(global) admin user name'),
     cfg.StrOpt('admin_passwd', short='p',
                secret=True,
-               help='Database admin user password'),
+               help='Database(global) admin user password'),
 ]
 
 ccnet_init_opts = copy.deepcopy(database_opts) + [
@@ -19,11 +19,11 @@ ccnet_init_opts = copy.deepcopy(database_opts) + [
     cfg.StrOpt('name',
                required=True,
                regex=r'^[a-zA-Z0-9_\-]{3,15}$',
-               help='Seafile server name'),
-    cfg.StrOpt('host',
+               help='Seafile server name, e.g: mynas'),
+    cfg.StrOpt('domain',
                default='127.0.0.1',
                regex=r'^[^.].+\..+[^.]$',
-               help='Seafile server ip or domain name'),
+               help='Seafile server ip or domain name, e.g: nas.my-domain.com'),
 ]
 
 seafile_init_opts = copy.deepcopy(database_opts) + [

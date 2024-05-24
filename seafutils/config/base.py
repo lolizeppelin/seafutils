@@ -32,7 +32,7 @@ database_opts = [
     cfg.StrOpt('user',
                required=True,
                help='Database user name'),
-    cfg.StrOpt('passwd', short='p',
+    cfg.StrOpt('passwd',
                secret=True,
                help='Database user password'),
     cfg.StrOpt('admin',
