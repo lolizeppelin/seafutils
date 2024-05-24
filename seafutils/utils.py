@@ -5,8 +5,33 @@ if os.name == 'nt':
     def getuser(uid):
         return "seafile"
 
+
+    def switch_to_seafile():
+        """
+        do nothing
+        :return:
+        """
+        return True
+
+
 else:
     import pwd
+
+
+    def switch_to_seafile():
+        """
+        do nothing
+        :return:
+        """
+        user = pwd.getpwnam("seafile")
+        uid = os.getuid()
+        if uid == user.pw_uid:
+            return True
+        if uid != 0:
+            return False
+        os.setgid(user.pw_gid)
+        os.setuid(user.pw_uid)
+        return True
 
 
     def getuser(uid=None):

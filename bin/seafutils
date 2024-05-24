@@ -6,7 +6,7 @@ import seafutils
 def main():
     app = sys.argv[1]
     sys.argv[1] = '--config-file=/etc/seafile/seafile.conf'
-    seafutils.run(app)
+    seafutils.execute(app)
 
 
 if __name__ == '__main__':
