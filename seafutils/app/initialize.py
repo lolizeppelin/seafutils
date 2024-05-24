@@ -22,8 +22,6 @@ def password(length):
 
 
 def verify(path):
-    if not os.path.exists(path):
-        raise ValueError("path %s not exist" % path)
     try:
         st = os.stat(path)
     except OSError:
