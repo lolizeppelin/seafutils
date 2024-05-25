@@ -53,7 +53,7 @@ def seafile():
     conf = cfg.CONF.seafile
 
     config = AllowUppercaseConf()
-    section = 'Database'
+    section = 'database'
     config.add_section(section)
     config.set(section, 'type', "pgsql")
     config.set(section, 'host', conf.host)
