@@ -57,7 +57,7 @@ export PYTHON=python2
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 # default ccnet data dir
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/seafile
 
 
 %check
@@ -89,7 +89,7 @@ fi
 %{_libdir}/%{name}.so.*
 %{_bindir}/searpc-codegen.py
 %{python2_sitearch}/pysearpc/
-%dir %attr(0755,seafile,seafile) %{_sharedstatedir}/%{name}
+%dir %attr(0755,seafile,seafile) %{_sharedstatedir}/seafile
 
 %files devel
 %{_includedir}/searpc*
