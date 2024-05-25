@@ -130,6 +130,7 @@ def init_seafile():
                     config.read(path)
                     with open(path, 'w') as f:
                         config.write(f)
+                    os.makedirs(os.path.join(cfg.CONF.datadir, 'library-template'))
                     yield
 
 
