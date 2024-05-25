@@ -46,9 +46,6 @@ def seafile():
     conf = cfg.CONF.seafile
 
     config = ConfigParser()
-    section = 'fileserver'
-    config.add_section(section)
-    config.set(section, 'port', str(conf.eport))
     section = 'Database'
     config.add_section(section)
     config.set(section, 'type', "pgsql")

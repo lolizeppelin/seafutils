@@ -66,14 +66,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %pre
 if [ "$1" = "1" ] ; then
-    getent group seafile >/dev/null || groupadd -f -g 873 -r seafile
-    if ! getent passwd seafile >/dev/null ; then
-        if ! getent passwd 873 >/dev/null ; then
-          useradd -r -u 873 -g seafile -M -s /sbin/nologin -c "Seafile" seafile
-        else
-          useradd -r -g seafile -M -s /sbin/nologin -c "Seafile" seafile
-        fi
-    fi
+    useradd -r -M -s /sbin/nologin -c "Seafile run user" seafile
 fi
 
 

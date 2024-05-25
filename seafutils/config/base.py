@@ -34,7 +34,7 @@ database_opts = [
                help='Database user name'),
     cfg.StrOpt('passwd',
                secret=True,
-               help='Database user password'),
+               help='Database user password, default random 10 chars'),
     cfg.StrOpt('admin',
                help='Database admin user name'),
     cfg.StrOpt('admin_passwd',
