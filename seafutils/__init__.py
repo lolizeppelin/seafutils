@@ -31,5 +31,5 @@ def launch(app: str):
     if getuser() != 'seafile':
         print("run user not seafile", file=sys.stderr)
         sys.exit(1)
-    cfg.CONF.register_cli_opt(cmd.launch_opts)
+    cfg.CONF.register_cli_opts(cmd.launch_opts)
     _run('seafutils.launcher', app)

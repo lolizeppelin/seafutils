@@ -2,6 +2,13 @@
 from oslo_config import cfg
 from configparser import ConfigParser
 
+
+class AllowUppercaseConf(ConfigParser):
+    def optionxform(self, optionstr):
+        return optionstr
+
+
+
 # setting 模板
 TEMPLATE = '''\
 # -*- coding: utf-8 -*-\n
@@ -45,7 +52,7 @@ def seafile():
     """
     conf = cfg.CONF.seafile
 
-    config = ConfigParser()
+    config = AllowUppercaseConf()
     section = 'Database'
     config.add_section(section)
     config.set(section, 'type', "pgsql")
@@ -65,7 +72,7 @@ def ccnet():
     """
     conf = cfg.CONF.ccnet
     section = 'Database'
-    config = ConfigParser()
+    config = AllowUppercaseConf()
     config.add_section(section)
     config.set(section, 'ENGINE', "pgsql")
     config.set(section, 'HOST', conf.host)

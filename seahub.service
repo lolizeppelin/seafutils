@@ -6,11 +6,9 @@ After=ccnet.service memcached.service
 [Service]
 LimitNOFILE=10000
 Type=forking
-PIDFile=/run/seafile/seahub-wsgi.pid
-GuessMainPID=no
 User=seafile
 Group=seafile
-ExecStart=/usr/bin/seafile-luanch seahub -s /run/seafile/seahub.sock --pidfile /run/seafile/seahub-wsgi.pid -t 5
+ExecStart=/usr/bin/seafile-launch seahub -s /run/seafile/seahub.sock --pidfile /run/seafile/seahub-wsgi.pid
 TimeoutStartSec=6
 TimeoutStopSec=30
 

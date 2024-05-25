@@ -6,11 +6,10 @@ After=ccnet.service postgresql-15.service
 [Service]
 LimitNOFILE=10000
 Type=simple
-GuessMainPID=no
 User=seafile
 Group=seafile
-ExecStart=/usr/bin/seafile-luanch seafile --pidfile /run/seafile/seafile-server.pid -t 5
-TimeoutStartSec=6
+ExecStart=/usr/bin/seafile-launch seafile --pidfile /run/seafile/seafile-server.pid
+TimeoutStartSec=5
 TimeoutStopSec=30
 
 

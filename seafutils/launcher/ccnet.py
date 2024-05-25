@@ -22,6 +22,5 @@ def run():
         '-c', cfg.CONF.config,
         '-f', os.path.join(cfg.CONF.logdir, "ccnet-server.log"),
         '-P', cfg.CONF.pidfile,  # pid
-        '-d'  # 以守护进程运行
     )
     os.execv(CCNET, args)
