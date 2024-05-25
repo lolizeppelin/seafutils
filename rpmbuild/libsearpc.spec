@@ -56,6 +56,9 @@ export PYTHON=python2
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
+# default ccnet data dir
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
+
 
 %check
 # tests are failing on big endian arches
@@ -86,6 +89,7 @@ fi
 %{_libdir}/%{name}.so.*
 %{_bindir}/searpc-codegen.py
 %{python2_sitearch}/pysearpc/
+%dir %attr(0755,seafile,seafile) %{_sharedstatedir}/%{name}
 
 %files devel
 %{_includedir}/searpc*

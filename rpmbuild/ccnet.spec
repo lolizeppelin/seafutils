@@ -80,8 +80,6 @@ export PYTHON=python2
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-# default ccnet data dir
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
 
 
 %check
@@ -99,7 +97,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{python2_sitearch}/%{name}
 %{_bindir}/%{name}-init
 %{_bindir}/%{name}-server
-%dir %attr(0755,seafile,seafile) %{_sharedstatedir}/%{name}
 
 
 %files devel
