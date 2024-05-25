@@ -69,7 +69,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %pre
 if [ "$1" = "1" ] ; then
-    useradd -r -M -s /sbin/nologin -c "Seafile run user" seafile
+    useradd -r -M -s /sbin/nologin -d /var/lib/seafile -c "Seafile run user" seafile
 fi
 
 
