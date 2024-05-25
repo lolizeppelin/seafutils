@@ -6,7 +6,7 @@ base_opts = [
                default='/etc/seafile/central',
                help='Seafile central config path'),
     cfg.StrOpt('config',
-               default='/var/lib/ccnet/config',
+               default='/var/lib/seafile/config',
                help='ccnet config path'),
     cfg.StrOpt('datadir',
                default='/var/lib/seafile/data',
