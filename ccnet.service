@@ -4,7 +4,7 @@ After=network.target postgresql-15.service remote-fs.target nss-lookup.target
 
 [Service]
 LimitNOFILE=10000
-Type=simple
+Type=forking
 User=seafile
 Group=seafile
 ExecStart=/usr/bin/seafile-launch ccnet --pidfile /run/seafile/ccnet-server.pid

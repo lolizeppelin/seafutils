@@ -22,5 +22,6 @@ def run():
         '-c', cfg.CONF.config,
         '-f', os.path.join(cfg.CONF.logdir, "ccnet-server.log"),
         '-P', cfg.CONF.pidfile,  # pid
+        '-d'
     )
     os.execv(CCNET, args)
