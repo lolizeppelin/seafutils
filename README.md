@@ -1,5 +1,19 @@
 # Seafile 服务端工具
 
+```text
+seafile不提供rpm包
+seafile没有使用标准服务管理(systemd)
+seafile命令行不统一且使用多个脚本
+seafile初始化配置比较麻烦
+
+于是基于编seafile7.0.0写了一套seafile管理工具
+
+1. 标准rpm包
+2. 统一命令行
+3. 标准systemd服务管理
+4. 简洁的配置文件(单文件)
+```
+
 --- 
 
 # seafile安装
@@ -41,7 +55,7 @@ OPTIONS="-l 127.0.0.1 -s /run/memcached/memcached.sock -a 0666"
 
 ---
 
-#### 所有必须使用seafile用户或者root执行
+#### 所有命令必须使用seafile用户或者root执行
 
 #### root执行时会自动切换为seafile用户,不可访问root权限文件
 
@@ -139,7 +153,7 @@ drop role seahub;
 
 ## seafutils relocate
 
-### seafile数据文件夹修改重定向
+### seafile数据文件夹修改重定向(修改配置文件后执行)
 
 ---
 
