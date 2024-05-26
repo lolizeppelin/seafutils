@@ -47,4 +47,4 @@ def get_py2path(*args):
         '/usr/lib64/python2.7/site-packages',
         '/usr/lib/python2.7/site-packages',
     ])
-    return ':'.join(args)
+    return args

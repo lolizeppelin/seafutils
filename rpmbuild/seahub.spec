@@ -18,6 +18,7 @@ Source2:        seahub.postgres.sql
 Requires:       python2 >= 2.7
 Requires:       libsearpc >= 3.1
 Requires:       python2-psycopg2 >= 2.0
+#Requires:       python2-pillow >= 4.3.0
 # 禁止自动依赖生成
 AutoReqProv:    no
 

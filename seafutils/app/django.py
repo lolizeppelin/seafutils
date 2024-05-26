@@ -17,13 +17,14 @@ def run(project, method):
         "CCNET_CONF_DIR": cfg.CONF.config,
         "SEAFILE_CONF_DIR": cfg.CONF.datadir,
         "SEAFILE_CENTRAL_CONF_DIR": cfg.CONF.central,
-        "PYTHONPATH": get_py2path(cfg.CONF.website, third_part),
+        "PYTHONPATH": ':'.join(get_py2path(cfg.CONF.website, third_part)),
     }
     args = [
         PYTHON,
         os.path.join(cfg.CONF.website, "manage.py"),
         method
     ]
+    os.chdir(cfg.CONF.website)
     os.execve(PYTHON, args, env)
 
 
