@@ -117,11 +117,11 @@ passwd          密码(默认生成随机密码)
 admin           数据库管理员账户(默认使用全局数据库管理员账户)
 admin_passwd    数据库管理员密码(默认使用全局数据库管理员密码)
 
-secret          seahub所用的加密key,建议参考官网的key生成方式用随机算法生成
-memcache        memcache地址,不配置表示不使用memcache缓存session
+secret          seahub所用的加密key(默认使用uuid4.hex前20个字符)
+memcache        memcache地址(默认不配置,不使用memcache缓存session)
 ```
 
-#### 只有以下三个参数为必要参数
+#### 初始化只有三个必要参数
 
 1. 服务名
 2. 域名
