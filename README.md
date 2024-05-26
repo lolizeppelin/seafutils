@@ -1,10 +1,51 @@
 # Seafile 服务端工具
 
-#### 必须使用seafile用户或者root执行
-
-#### root执行时会自动切换为seafile用户,不可读取root权限文件
-
 --- 
+
+# seafile安装
+
+```shell
+# seafile(seafile 基础课)
+dnf install libsearpc-3.1.11*
+# ccnet(seafile RPC服务)
+dnf install ccnet-7.0.2* ccnet-server-7.0.2*
+# seafile(seafile 数据服务)
+dnf install seafile-7.0.2* seafile-server-7.0.2*
+# seahub(seafile 前端)
+dnf install seahub-7.0.2*
+# 管理工具
+dnf install seafutils-2.0*
+# 安装memcached 用于存储session
+dnf install memcached
+```
+
+# memcached配置
+
+```ini
+# systemctl edit memcached.service
+[Service]
+RuntimeDirectoryMode = 0777
+RuntimeDirectoryPreserve = no
+RuntimeDirectory = memcached
+```
+
+```shell
+# vim /etc/sysconfig/memcached 
+PORT="11211"
+USER="memcached"
+MAXCONN="1024"
+CACHESIZE="128"
+#OPTIONS="-l 127.0.0.1,::1"
+OPTIONS="-l 127.0.0.1 -s /run/memcached/memcached.sock -a 0666"
+```
+
+---
+
+#### 所有必须使用seafile用户或者root执行
+
+#### root执行时会自动切换为seafile用户,不可访问root权限文件
+
+---
 
 ## seafutils init
 
@@ -66,6 +107,34 @@ secret          seahub所用的加密key,建议参考官网的key生成方式用
 memcache        memcache地址,不配置表示不使用memcache缓存session
 ```
 
+#### 只有以下三个参数为必要参数
+
+1. 服务名
+2. 域名
+3. 数据库管理员密码
+
+#### 一个最简化的初始化命令如下
+
+```shell
+# 如果需要使用memcache,可以再加一个参数-m /run/memcached/memcached.sock
+# init执行过程失败会自动清理
+seafutils init -n mynas -d mynas.my-domain.com -p db_admin_pass
+```
+
+### 删除数据库使用如下sql
+
+```sql
+drop database seafile;
+drop database ccnet;
+drop database seahub;
+drop owned by seafile cascade;
+drop owned by ccnet cascade;
+drop owned by seahub cascade;
+drop role seafile;
+drop role ccnet;
+drop role seahub;
+```
+
 ---
 
 ## seafutils relocate
@@ -103,26 +172,6 @@ memcache        memcache地址,不配置表示不使用memcache缓存session
 ### seahub清理session
 
 ---
-
-# memcached配置
-
-```ini
-# systemctl edit memcached.service
-[Service]
-RuntimeDirectoryMode=0777
-RuntimeDirectoryPreserve=no
-RuntimeDirectory=memcached
-```
-
-```shell
-# vim /etc/sysconfig/memcached 
-PORT="11211"
-USER="memcached"
-MAXCONN="1024"
-CACHESIZE="128"
-#OPTIONS="-l 127.0.0.1,::1"
-OPTIONS="-l 127.0.0.1 -s /run/memcached/memcached.sock -a 0666"
-```
 
 # seafile启动与关闭
 

@@ -7,16 +7,12 @@
 dnf install langpacks-core-en
 # rpmfusion 源安装
 dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-# 不要装ffmpeg-free
-dnf install ffmpeg
 # openstack 基础库
 dnf install python-oslo-config python-stevedore python-pbr python3-psycopg3
 # python2
 dnf install python2
 # 数据库
 dnf install postgresql15-server postgresql15-devel
-# aria2
-dnf install aria2
 # seafile 依赖
 dnf install pygobject2
 
@@ -55,11 +51,30 @@ rpmbuild -ba rpmbuild/SPECS/python-psycopg2.spec --without python3 --with python
 # root 安装编译好的psycopg2
 rpmbuild -ba rpmbuild/SPECS/python2-simplejson.spec --without tests
 # root 安装编译好的simplejson
+````
+
+### 编译seafile
+
+```shell
 rpmbuild -ba rpmbuild/SPECS/libsearpc.spec 
-# root 安装编译好的libsearpc
+# root 安装编译好的libsearpc libsearpc-devel
 rpmbuild -ba rpmbuild/SPECS/ccnet.spec 
 # root 安装编译好的ccnet  ccnet-devel
 rpmbuild -ba rpmbuild/SPECS/seafile.spec 
-# root 安装编译好的seafile-server
+rpmbuild -ba rpmbuild/SPECS/seahub.spec 
 rpmbuild -ba rpmbuild/SPECS/seafutils.spec 
 ```
+
+---
+
+## seahub三方模块(thirdpart)
+
+#### 文件来源自seafile 7.0.0服务端安装包
+
+#### 包含动态库的模块都通过pip重新下载并替换so文件
+
+#### 下述模块的动态库文件过于古老,rpmbuild打包时提示缺失信息,pillow在rpmbuild会报错,因此在fedora 40下重新编译相同版本并替换
+
+- aggdraw
+- pylibmc
+- pillow
