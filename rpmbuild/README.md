@@ -1,5 +1,7 @@
 ## seafile rpm 打包文件
 
+#### 所有服务基于postgres,需要编译mysql自行修改spec文件
+
 ### 安装依赖
 
 ```shell
