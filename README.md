@@ -135,20 +135,6 @@ memcache        memcache地址(默认不配置,不使用memcache缓存session)
 seafutils init -n mynas -d mynas.my-domain.com -p db_admin_pass
 ```
 
-### 删除数据库使用如下sql
-
-```sql
-drop database seafile;
-drop database ccnet;
-drop database seahub;
-drop owned by seafile cascade;
-drop owned by ccnet cascade;
-drop owned by seahub cascade;
-drop role seafile;
-drop role ccnet;
-drop role seahub;
-```
-
 ---
 
 ## seafutils relocate
@@ -202,4 +188,25 @@ systemctl start seafile.service
 systemctl start seahub.service
 
 
+```
+
+---
+
+### seafile数据删除
+
+1. 删除配置指向的ccnet配置文件夹(默认/var/lib/seafile/config)
+2. 删除配置指向的seafile数据文件夹(默认/var/lib/seafile/data)
+3. 删除配置指向配置文件夹下的所有文件(默认/etc/seafile/central)
+4. 删除数据库
+
+```sql
+drop database seafile;
+drop database ccnet;
+drop database seahub;
+drop owned by seafile cascade;
+drop owned by ccnet cascade;
+drop owned by seahub cascade;
+drop role seafile;
+drop role ccnet;
+drop role seahub;
 ```
