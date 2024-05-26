@@ -19,7 +19,7 @@ seafile初始化配置比较麻烦
 # seafile安装
 
 ```shell
-# seafile(seafile 基础课)
+# seafile(seafile 基础库)
 dnf install libsearpc-3.1.11*
 # ccnet(seafile RPC服务)
 dnf install ccnet-7.0.2* ccnet-server-7.0.2*
