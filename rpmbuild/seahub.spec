@@ -1,5 +1,6 @@
 %global debug_package %{nil}
 %define _release 1
+%define _build_id_links none
 
 
 Name:           seahub
