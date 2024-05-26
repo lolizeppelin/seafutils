@@ -59,11 +59,27 @@ OPTIONS="-l 127.0.0.1 -s /run/memcached/memcached.sock -a 0666"
 
 #### root执行时会自动切换为seafile用户,不可访问root权限文件
 
+#### 所有命令支持 -h 查看参数
+
 ---
 
 ## seafutils init
 
-### 服务初始化
+#### 初始化只有三个必要参数
+
+1. 服务名
+2. 域名
+3. 数据库管理员密码
+
+#### 一个最简化的初始化命令如下
+
+```shell
+# 如果需要使用memcache,可以再加一个参数-m /run/memcached/memcached.sock
+# init执行过程失败会自动清理
+seafutils init -n mynas -d mynas.my-domain.com -p db_admin_pass
+```
+
+### 全初始化参数如下
 
 - #### DEFAULT
 
@@ -119,20 +135,6 @@ admin_passwd    数据库管理员密码(默认使用全局数据库管理员密
 
 secret          seahub所用的加密key(默认使用uuid4.hex前20个字符)
 memcache        memcache地址(默认不配置,不使用memcache缓存session)
-```
-
-#### 初始化只有三个必要参数
-
-1. 服务名
-2. 域名
-3. 数据库管理员密码
-
-#### 一个最简化的初始化命令如下
-
-```shell
-# 如果需要使用memcache,可以再加一个参数-m /run/memcached/memcached.sock
-# init执行过程失败会自动清理
-seafutils init -n mynas -d mynas.my-domain.com -p db_admin_pass
 ```
 
 ---
