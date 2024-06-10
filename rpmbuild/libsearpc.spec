@@ -58,6 +58,8 @@ export PYTHON=python2
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 install -p -m 644 -D %{SOURCE1} %{buildroot}%{_sysusersdir}/seafile.conf
+# default data dir
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/seafile
 
 
 %check
@@ -66,6 +68,11 @@ install -p -m 644 -D %{SOURCE1} %{buildroot}%{_sysusersdir}/seafile.conf
 %ifnarch ppc ppc64 s390 s390x
 %{__make} check
 %endif
+
+%pre
+if [ "$1" = "1" ] ; then
+    useradd -r -M -s /sbin/nologin -d /var/lib/seafile -c "Seafile account" seafile > /dev/null 2>&1
+fi
 
 
 %post -p /sbin/ldconfig
@@ -77,6 +84,7 @@ install -p -m 644 -D %{SOURCE1} %{buildroot}%{_sysusersdir}/seafile.conf
 %{_bindir}/searpc-codegen.py
 %{python2_sitearch}/pysearpc/
 %{_sysusersdir}/seafile.conf
+%dir %attr(0755,seafile,seafile) %{_sharedstatedir}/seafile
 
 %files devel
 %{_includedir}/searpc*
