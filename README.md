@@ -6,7 +6,7 @@ seafile没有使用标准服务管理(systemd)
 seafile命令行不统一且使用多个脚本
 seafile初始化配置比较麻烦
 
-于是基于编seafile7.0.0写了一套seafile管理工具
+于是基于编seafile7.0.2写了一套seafile管理工具
 
 1. 标准rpm包
 2. 统一命令行
