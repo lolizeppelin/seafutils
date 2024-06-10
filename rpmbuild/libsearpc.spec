@@ -58,11 +58,6 @@ export PYTHON=python2
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 install -p -m 644 -D %{SOURCE1} %{buildroot}%{_sysusersdir}/seafile.conf
-# default seafile data dir
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
-
-# default ccnet data dir
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/seafile
 
 
 %check
@@ -82,8 +77,6 @@ install -p -m 644 -D %{SOURCE1} %{buildroot}%{_sysusersdir}/seafile.conf
 %{_bindir}/searpc-codegen.py
 %{python2_sitearch}/pysearpc/
 %{_sysusersdir}/seafile.conf
-%defattr(0755,seafile,seafile,-)
-%dir %{_sharedstatedir}/seafile
 
 %files devel
 %{_includedir}/searpc*
