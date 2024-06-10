@@ -1,6 +1,6 @@
 [Unit]
 Description=Seafile Ccnet
-After=network.target postgresql-15.service remote-fs.target nss-lookup.target
+After=network.target postgresql.service remote-fs.target nss-lookup.target
 
 [Service]
 LimitNOFILE=10000

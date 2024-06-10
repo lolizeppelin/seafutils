@@ -45,6 +45,7 @@ Requires:       glib2 >= 2.5
 
 Requires:       ccnet = %{version}
 Requires:       libsearpc >= 3.1
+Requires:       libsearpc < 3.2
 Requires:       postgresql-libs
 
 
@@ -94,8 +95,6 @@ export PYTHON=python2
 %install
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
-# default seafile data dir
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
 
 # shebangs 修正
 sed -i '1c\#!/usr/bin/python2' %{buildroot}%{_bindir}/%{name}-admin
@@ -127,8 +126,6 @@ sed -i '1c\#!/usr/bin/python2' %{buildroot}%{_bindir}/%{name}-admin
 %{_bindir}/%{_exe_prefix}-server-init
 %{_bindir}/%{_exe_prefix}serv-gc
 %{python2_sitearch}/seaserv
-%defattr(0750,seafile,seafile,-)
-%dir %{_sharedstatedir}/%{name}
 
 
 %files devel

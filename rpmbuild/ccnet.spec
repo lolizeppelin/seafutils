@@ -44,6 +44,7 @@ Requires:       libarchive
 
 
 Requires:       libsearpc >= 3.1
+Requires:       libsearpc < 3.2
 Requires:       postgresql-libs
 
 

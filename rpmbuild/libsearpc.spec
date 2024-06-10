@@ -7,6 +7,8 @@ Summary:        A simple and easy-to-use C language RPC framework
 License:        LGPLv3
 URL:            https://github.com/haiwen/%{name}
 Source0:        %{name}-3.1-latest.tar.gz
+Source1:        seafile-sysuser.conf
+
 
 Requires:       python2 >= 2.7
 BuildRequires:  autoconf
@@ -55,6 +57,9 @@ export PYTHON=python2
 %install
 %{__make} install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+install -p -m 644 -D %{SOURCE1} %{buildroot}%{_sysusersdir}/seafile.conf
+# default seafile data dir
+%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
 
 # default ccnet data dir
 %{__mkdir} -p %{buildroot}%{_sharedstatedir}/seafile
@@ -67,21 +72,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{__make} check
 %endif
 
-%pre
-if [ "$1" = "1" ] ; then
-    useradd -r -M -s /sbin/nologin -d /var/lib/seafile -c "Seafile run user" seafile
-fi
-
 
 %post -p /sbin/ldconfig
-
-
-%postun
-/sbin/ldconfig
-if [ "$1" = "0" ] ; then
-    /usr/sbin/userdel seafile > /dev/null 2>&1
-fi
-
 
 
 %files
@@ -89,7 +81,9 @@ fi
 %{_libdir}/%{name}.so.*
 %{_bindir}/searpc-codegen.py
 %{python2_sitearch}/pysearpc/
-%dir %attr(0755,seafile,seafile) %{_sharedstatedir}/seafile
+%{_sysusersdir}/seafile.conf
+%defattr(0755,seafile,seafile,-)
+%dir %{_sharedstatedir}/seafile
 
 %files devel
 %{_includedir}/searpc*
@@ -100,7 +94,7 @@ fi
 %changelog
 * Wed May 22 2024 Lolizeppelin <lolizeppelin@gmail.com> - 3.1-11
 - Update for fedora 40
-- Add seafile user
+- Add sys user seafile
 - Force to python2
 
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.1-10
